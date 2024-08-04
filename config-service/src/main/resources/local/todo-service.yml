@@ -1,1 +1,25 @@
 server.port: 8084
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/todo?createDatabaseIfNotExist=true
+    username: root
+    password: 'dev'
+    hikari:
+      autoCommit: false
+      maximumPoolSize: 30
+      minimumIdle: 10
+      connectionTimeout: 30000
+      idleTimeout: 30000
+      maxLifetime: 1800000
+      cache-prep-stmts: true
+      prep-stmt-cache-size: 250
+      prep-stmt-cache-sql-limit: 2048
+      pool-name: HikariPool
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        show-sql: 'true'
+        format_sql: 'true'
+    hibernate:
+      ddl-auto: update
