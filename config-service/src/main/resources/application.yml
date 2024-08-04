@@ -1,0 +1,10 @@
+server.port: 8080
+spring:
+  application:
+    name: config-service
+  profiles.active: native # classpath src rather than Git repo
+  cloud.config.server.native.search-locations: classpath:/local
+  security:
+    user:
+      name: dev
+      password: dev

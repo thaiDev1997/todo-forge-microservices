@@ -1,0 +1,3 @@
+eureka:
+  client.service-url.defaultZone: http://localhost:8081/eureka/ # must be defaultZone, not default-zone
+  instance.prefer-ip-address: true

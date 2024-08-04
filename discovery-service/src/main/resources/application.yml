@@ -1,0 +1,11 @@
+spring:
+  application.name: discovery-service
+  config.import: configserver:http://localhost:8080
+  cloud.config:
+    fail-fast: true
+    username: dev
+    password: dev
+
+eureka.client:
+  register-with-eureka: false
+  fetch-registry: false

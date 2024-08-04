@@ -1,0 +1,7 @@
+spring:
+  application.name: gateway-service
+  config.import: configserver:http://localhost:8080
+  cloud.config:
+    fail-fast: true
+    username: dev
+    password: dev
