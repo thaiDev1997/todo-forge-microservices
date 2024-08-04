@@ -1,1 +1,33 @@
 server.port: 8082
+spring.cloud:
+  gateway:
+    # CORS configuration
+    globalcors.corsConfigurations:
+      '[/**]':  # pattern to apply CORS
+        allowedOrigins: # allowed origins
+          - "*"
+        allowedMethods: # allowed HTTP methods
+          - GET
+          - POST
+          - PUT
+          - DELETE
+          - OPTIONS
+        allowedHeaders: # allowed headers
+          - "*"
+    routes:
+      - id: todo # todo-service
+        uri: lb://todo-service
+        predicates:
+          - Path=/todo/**
+        filters:
+          - StripPrefix=1
+        metadata:
+          cors:
+            allowedOrigins: '*'
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders: '*'
