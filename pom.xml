@@ -21,6 +21,7 @@
         <module>auth-service</module>
         <module>todo-service</module>
         <module>core-service</module>
+        <module>account-service</module>
     </modules>
     <properties>
         <java.version>11</java.version>
