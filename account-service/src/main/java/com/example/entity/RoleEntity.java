@@ -9,25 +9,29 @@ import lombok.experimental.FieldDefaults;
 import javax.persistence.*;
 import java.util.Set;
 
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "role")
 public class RoleEntity extends BaseEntity {
+    private static final long serialVersionUID = 1L;
 
     String title; // eg: Admin
+    @Column(updatable = false)
     String code; // eg: ROLE_ADMIN
     String description; // eg: Has full access to entire resources
 
     @Column(name = "is_active")
     boolean isActive;
 
+    @EqualsAndHashCode.Exclude
     @ManyToMany(mappedBy = "roles")
     @OrderBy("id  ASC")
     Set<AccountEntity> accounts;
 
+    @EqualsAndHashCode.Exclude
     @ManyToMany
     @JoinTable(
         name = "role_permission",

@@ -1,23 +1,27 @@
 package com.example.entity;
 
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 
+@EqualsAndHashCode(callSuper = true)
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "profile")
 public class ProfileEntity extends BaseEntity {
+    private static final long serialVersionUID = 1L;
 
     String firstName;
     String lastName;
     String emailAddress;
 
+    @EqualsAndHashCode.Exclude
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id", foreignKey = @ForeignKey(name = "fk_account_profile"))
     AccountEntity account;

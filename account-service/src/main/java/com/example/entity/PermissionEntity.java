@@ -3,6 +3,7 @@ package com.example.entity;
 import com.example.constant.ScopePermission;
 import com.example.converter.ScopeConverter;
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
@@ -15,7 +16,9 @@ import java.util.Set;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "permission")
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 public class PermissionEntity extends BaseEntity {
+    private static final long serialVersionUID = 1L;
 
     String title;
     String description;
@@ -23,8 +26,9 @@ public class PermissionEntity extends BaseEntity {
     @Column(name = "is_active")
     boolean isActive;
 
+    @EqualsAndHashCode.Include
     @Convert(converter = ScopeConverter.class) // name property rather than enum name
-    private ScopePermission role;
+    ScopePermission scope;
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "permissions")
     @OrderBy("id, title ASC")
