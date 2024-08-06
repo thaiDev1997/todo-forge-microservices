@@ -13,7 +13,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(value = "/resources") // Base Path
+@RequestMapping(value = "/api/v1/resources") // Base Path
 public class ResourceController {
 
     ResourceService resourceService;

@@ -12,7 +12,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(value = "/roles")
+@RequestMapping(value = "/api/v1/roles")
 public class RoleController {
 
     RoleService roleService;
@@ -42,4 +42,15 @@ public class RoleController {
         roleService.delete(id);
     }
 
+    @PostMapping(value = "/{id}/permissions/{permission-id}")
+    public void savePermission(@PathVariable(value = "id") long roleId,
+                               @PathVariable(value = "permission-id") long permissionId) {
+        roleService.savePermission(roleId, permissionId);
+    }
+
+    @DeleteMapping(value = "/{id}/permissions/{permission-id}")
+    public void deletePermission(@PathVariable(value = "id") long roleId,
+                                 @PathVariable(value = "permission-id") long permissionId) {
+        roleService.deletePermission(roleId, permissionId);
+    }
 }

@@ -16,7 +16,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,7 +69,6 @@ public class TodoServiceImpl implements TodoService {
         TodoEntity todoEntity;
         if (id == 0) {
             todoEntity = new TodoEntity();
-            todoEntity.setCreatedAt(LocalDateTime.now());
         } else {
             todoEntity = todoRepository.getReferenceById(id);
             todoEntity.setStatus(todo.getStatus());

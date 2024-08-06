@@ -12,7 +12,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(value = "/accounts")
+@RequestMapping(value = "/api/v1/accounts")
 public class AccountController {
 
     AccountService accountService;

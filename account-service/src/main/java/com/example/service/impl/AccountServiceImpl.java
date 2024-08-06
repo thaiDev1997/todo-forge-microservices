@@ -21,7 +21,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -89,7 +88,6 @@ public class AccountServiceImpl implements AccountService {
             }
             accountEntity = modelMapper.map(account, AccountEntity.class);
             accountEntity.setStatus(AccountStatus.ACTIVE);
-            accountEntity.setCreatedAt(LocalDateTime.now());
         } else {
             accountEntity = accountRepository.getActive(id, username);
             if (Objects.isNull(accountEntity)) {
@@ -98,7 +96,6 @@ public class AccountServiceImpl implements AccountService {
 
             // TODO: BcryptPassword -> accountEntity.setPassword(account.getPassword());
             accountEntity.setStatus(account.getStatus());
-            accountEntity.setUpdatedAt(LocalDateTime.now());
         }
         accountRepository.saveAndFlush(accountEntity);
 

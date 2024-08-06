@@ -26,7 +26,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -123,7 +122,6 @@ public class ResourceServiceImpl implements ResourceService {
             }
             resourceEntity = modelMapper.map(resource, ResourceEntity.class);
             resourceEntity.setActive(Boolean.TRUE);
-            // resourceEntity.setCreatedAt(LocalDateTime.now());
         } else {
             resourceEntity = resourceRepository.getActive(id, code);
             if (Objects.isNull(resourceEntity)) {
@@ -131,7 +129,6 @@ public class ResourceServiceImpl implements ResourceService {
             }
             resourceEntity.setTitle(resource.getTitle());
             resourceEntity.setDescription(resource.getDescription());
-            resourceEntity.setUpdatedAt(LocalDateTime.now());
         }
         resourceRepository.saveAndFlush(resourceEntity);
 
@@ -153,26 +150,19 @@ public class ResourceServiceImpl implements ResourceService {
         ResourceEntity resource = resourceRepository.findById(resourceId)
                 .orElseThrow(() -> new BaseResponseException(HttpStatus.NOT_FOUND));
         PermissionEntity permissionEntity = modelMapper.map(permission, PermissionEntity.class);
-        permissionEntity.setCreatedAt(LocalDateTime.now());
         boolean result = resource.addPermission(permissionEntity);
-        if (!result && CollectionUtils.isNotEmpty(resource.getPermissions())) {
-            // permission already saves
-            throw new BaseResponseException(HttpStatus.CONFLICT);
-        }
+        if (!result) throw new BaseResponseException(HttpStatus.CONFLICT); // permission already saves
         resourceRepository.save(resource);
     }
 
     @Transactional
     @Override
     public void deletePermission(long resourceId, long permissionId) {
-        PermissionEntity permission = permissionRepository.findById(permissionId).orElseThrow(() -> new BaseResponseException(HttpStatus.NOT_FOUND));
+        PermissionEntity permission = permissionRepository.findById(permissionId)
+                .orElseThrow(() -> new BaseResponseException(HttpStatus.NOT_FOUND));
         ResourceEntity resource = permission.getResource();
-        if (Objects.isNull(resource)) {
-            throw new BaseResponseException(HttpStatus.NOT_FOUND);
-        }
-        if (resourceId != resource.getId()) {
-            throw new BaseResponseException(HttpStatus.BAD_REQUEST);
-        }
+        if (Objects.isNull(resource)) throw new BaseResponseException(HttpStatus.NOT_FOUND);
+        if (resourceId != resource.getId()) throw new BaseResponseException(HttpStatus.BAD_REQUEST);
         permissionRepository.delete(permission);
     }
 }

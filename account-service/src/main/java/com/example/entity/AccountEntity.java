@@ -41,6 +41,6 @@ public class AccountEntity extends BaseEntity {
     Set<RoleEntity> roles;
 
     @EqualsAndHashCode.Exclude
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "account", cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "account", cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
     ProfileEntity profile;
 }

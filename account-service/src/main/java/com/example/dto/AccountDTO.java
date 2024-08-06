@@ -4,8 +4,6 @@ import com.example.constant.AccountStatus;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import javax.persistence.Column;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Getter

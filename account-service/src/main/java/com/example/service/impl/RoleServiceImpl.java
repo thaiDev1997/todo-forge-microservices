@@ -1,14 +1,16 @@
 package com.example.service.impl;
 
 import com.example.dto.RoleDTO;
-import com.example.entity.RoleEntity;
+import com.example.entity.PermissionEntity;
 import com.example.entity.RoleEntity;
 import com.example.exception.BaseResponseException;
+import com.example.repository.PermissionRepository;
 import com.example.repository.RoleRepository;
 import com.example.service.RoleService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.apache.commons.collections4.CollectionUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -20,10 +22,10 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -31,8 +33,10 @@ import java.util.Objects;
 public class RoleServiceImpl implements RoleService {
     @PersistenceContext
     EntityManager entityManager;
-    RoleRepository roleRepository;
     ModelMapper modelMapper;
+
+    RoleRepository roleRepository;
+    PermissionRepository permissionRepository;
 
     @Override
     public List<RoleDTO> getAll() {
@@ -88,7 +92,6 @@ public class RoleServiceImpl implements RoleService {
             }
             roleEntity = modelMapper.map(role, RoleEntity.class);
             roleEntity.setActive(Boolean.TRUE);
-            roleEntity.setCreatedAt(LocalDateTime.now());
         } else {
             roleEntity = roleRepository.getActive(id, code);
             if (Objects.isNull(roleEntity)) {
@@ -96,7 +99,6 @@ public class RoleServiceImpl implements RoleService {
             }
             roleEntity.setTitle(role.getTitle());
             roleEntity.setDescription(role.getDescription());
-            roleEntity.setUpdatedAt(LocalDateTime.now());
         }
         roleRepository.saveAndFlush(roleEntity);
 
@@ -110,5 +112,32 @@ public class RoleServiceImpl implements RoleService {
         if (id > 0) {
             roleRepository.deleteById(id);
         }
+    }
+
+    @Transactional
+    @Override
+    public void savePermission(long roleId, long permissionId) {
+        RoleEntity roleEntity = roleRepository.findById(roleId)
+                .orElseThrow(() -> new BaseResponseException(HttpStatus.NOT_FOUND));
+        PermissionEntity permissionEntity = permissionRepository.findById(permissionId)
+                .orElseThrow(() -> new BaseResponseException(HttpStatus.NOT_FOUND));
+        boolean result = roleEntity.addPermission(permissionEntity);
+        if (!result) throw new BaseResponseException(HttpStatus.BAD_REQUEST);
+
+        roleRepository.save(roleEntity);
+    }
+
+    @Transactional
+    @Override
+    public void deletePermission(long roleId, long permissionId) {
+        RoleEntity roleEntity = roleRepository.findById(roleId)
+                .orElseThrow(() -> new BaseResponseException(HttpStatus.NOT_FOUND));
+        Set<PermissionEntity> permissions = roleEntity.getPermissions();
+        if (CollectionUtils.isEmpty(permissions)) return;
+        PermissionEntity permissionEntity = permissionRepository.findById(permissionId)
+                .orElseThrow(() -> new BaseResponseException(HttpStatus.NOT_FOUND));
+        permissions.remove(permissionEntity);
+        roleRepository.save(roleEntity);
+        // doesn't need this: permissionEntity.getRoles().remove(roleEntity);
     }
 }

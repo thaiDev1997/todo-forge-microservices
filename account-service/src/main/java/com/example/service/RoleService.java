@@ -9,4 +9,6 @@ public interface RoleService {
     RoleDTO getDetail(long id);
     RoleDTO saveOrUpdate(RoleDTO todo);
     void delete(long id);
+    void savePermission(long roleId, long permissionId);
+    void deletePermission(long roleId, long permissionId);
 }
