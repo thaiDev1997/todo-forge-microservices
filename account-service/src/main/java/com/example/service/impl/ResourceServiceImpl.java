@@ -8,15 +8,14 @@ import com.example.form.PermissionForm;
 import com.example.repository.PermissionRepository;
 import com.example.repository.ResourceRepository;
 import com.example.service.ResourceService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -25,7 +24,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -41,6 +39,7 @@ public class ResourceServiceImpl implements ResourceService {
     ResourceRepository resourceRepository;
     PermissionRepository permissionRepository;
 
+    @Transactional(readOnly = true)
     @Override
     public List<ResourceDTO> getAll(String searchTerm, String sortBy, boolean sortAsc, short page, short size) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
@@ -87,6 +86,7 @@ public class ResourceServiceImpl implements ResourceService {
         return query.getResultList();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public ResourceDTO getDetail(long id) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();

@@ -9,6 +9,8 @@ import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
@@ -30,8 +32,11 @@ public class AccountEntity extends BaseEntity {
     @Column(name = "last_login")
     LocalDateTime lastLogin;
 
+    // account is owner side of relationship
     @EqualsAndHashCode.Exclude
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY, targetEntity = RoleEntity.class,
+            cascade = { CascadeType.DETACH, CascadeType.MERGE,
+                    CascadeType.REFRESH, CascadeType.PERSIST })
     @JoinTable(
         name = "account_role",
         joinColumns = @JoinColumn(name = "account_id", nullable = false, foreignKey = @ForeignKey(name = "fk_account_role")),
@@ -43,4 +48,9 @@ public class AccountEntity extends BaseEntity {
     @EqualsAndHashCode.Exclude
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "account", cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
     ProfileEntity profile;
+
+    public boolean addRole(RoleEntity role) {
+        if (Objects.isNull(this.roles)) this.roles = new HashSet<>();
+        return this.roles.add(role);
+    }
 }

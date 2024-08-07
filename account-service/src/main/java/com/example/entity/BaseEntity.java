@@ -1,6 +1,7 @@
 package com.example.entity;
 
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
@@ -24,10 +25,12 @@ public class BaseEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
+    @EqualsAndHashCode.Exclude
     @Column(name = "created_at", updatable = false)
     @CreatedDate
     LocalDateTime createdAt;
 
+    @EqualsAndHashCode.Exclude
     @Column(name = "updated_at", insertable = false)
     @LastModifiedDate
     LocalDateTime updatedAt;

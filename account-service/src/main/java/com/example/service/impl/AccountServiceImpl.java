@@ -3,16 +3,19 @@ package com.example.service.impl;
 import com.example.constant.AccountStatus;
 import com.example.dto.AccountDTO;
 import com.example.entity.AccountEntity;
-import com.example.entity.AccountEntity;
+import com.example.entity.RoleEntity;
 import com.example.exception.BaseResponseException;
 import com.example.repository.AccountRepository;
+import com.example.repository.RoleRepository;
 import com.example.service.AccountService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.apache.commons.collections4.CollectionUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -20,10 +23,10 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -31,9 +34,15 @@ import java.util.Objects;
 public class AccountServiceImpl implements AccountService {
     @PersistenceContext
     EntityManager entityManager;
-    AccountRepository accountRepository;
     ModelMapper modelMapper;
 
+    AccountRepository accountRepository;
+    RoleRepository roleRepository;
+
+    // readOnly = true
+    // -> hope to omit Dirty Checking & tracking, prevent any write operations
+    // -> also support Master-Slave
+    @Transactional(readOnly = true)
     @Override
     public List<AccountDTO> getAll() {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
@@ -53,6 +62,7 @@ public class AccountServiceImpl implements AccountService {
         return entityManager.createQuery(cq).getResultList();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public AccountDTO getDetail(long id) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
@@ -93,10 +103,9 @@ public class AccountServiceImpl implements AccountService {
             if (Objects.isNull(accountEntity)) {
                 throw new BaseResponseException(HttpStatus.NOT_FOUND);
             }
-
-            // TODO: BcryptPassword -> accountEntity.setPassword(account.getPassword());
             accountEntity.setStatus(account.getStatus());
         }
+        // TODO: BcryptPassword -> accountEntity.setPassword(account.getPassword());
         accountRepository.saveAndFlush(accountEntity);
 
         modelMapper.map(accountEntity, account);
@@ -109,5 +118,33 @@ public class AccountServiceImpl implements AccountService {
         if (id > 0) {
             accountRepository.deleteById(id);
         }
+    }
+
+    @Transactional
+    @Override
+    public void saveRole(long id, long roleId) {
+        AccountEntity accountEntity = accountRepository.findById(id)
+                .orElseThrow(() -> new BaseResponseException(HttpStatus.NOT_FOUND));
+        RoleEntity roleEntity = roleRepository.findById(roleId)
+                .orElseThrow(() -> new BaseResponseException(HttpStatus.NOT_FOUND));
+        boolean result = accountEntity.addRole(roleEntity);
+        if (!result) {
+            throw new BaseResponseException(HttpStatus.CONFLICT);
+        }
+        accountRepository.save(accountEntity);
+    }
+
+    @Transactional
+    @Override
+    public void deleteRole(long id, long roleId) {
+        AccountEntity accountEntity = accountRepository.findById(id)
+                .orElseThrow(() -> new BaseResponseException(HttpStatus.NOT_FOUND));
+        Set<RoleEntity> roles = accountEntity.getRoles();
+        if (CollectionUtils.isEmpty(roles)) return;
+        RoleEntity roleEntity = roleRepository.findById(roleId)
+                .orElseThrow(() -> new BaseResponseException(HttpStatus.NOT_FOUND));
+        boolean result = roles.remove(roleEntity);
+        if (!result) throw new BaseResponseException(HttpStatus.BAD_REQUEST);
+        accountRepository.save(accountEntity);
     }
 }

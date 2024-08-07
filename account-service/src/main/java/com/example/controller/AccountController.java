@@ -42,4 +42,16 @@ public class AccountController {
         accountService.delete(id);
     }
 
+    @PostMapping(value = "/{id}/role/{role-id}")
+    public void saveRole(@PathVariable(value = "id") long id,
+                         @PathVariable(value = "role-id") long roleId) {
+        accountService.saveRole(id, roleId);
+    }
+
+    @DeleteMapping(value = "/{id}/role/{role-id}")
+    public void deleteRole(@PathVariable(value = "id") long id,
+                           @PathVariable(value = "role-id") long roleId) {
+        accountService.deleteRole(id, roleId);
+    }
+
 }

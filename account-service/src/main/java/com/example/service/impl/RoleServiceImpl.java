@@ -14,6 +14,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -21,7 +22,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -38,6 +38,7 @@ public class RoleServiceImpl implements RoleService {
     RoleRepository roleRepository;
     PermissionRepository permissionRepository;
 
+    @Transactional(readOnly = true)
     @Override
     public List<RoleDTO> getAll() {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
@@ -57,6 +58,7 @@ public class RoleServiceImpl implements RoleService {
         return entityManager.createQuery(cq).getResultList();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public RoleDTO getDetail(long id) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
@@ -136,7 +138,8 @@ public class RoleServiceImpl implements RoleService {
         if (CollectionUtils.isEmpty(permissions)) return;
         PermissionEntity permissionEntity = permissionRepository.findById(permissionId)
                 .orElseThrow(() -> new BaseResponseException(HttpStatus.NOT_FOUND));
-        permissions.remove(permissionEntity);
+        boolean result = permissions.remove(permissionEntity);
+        if (!result) throw new BaseResponseException(HttpStatus.BAD_REQUEST);
         roleRepository.save(roleEntity);
         // doesn't need this: permissionEntity.getRoles().remove(roleEntity);
     }

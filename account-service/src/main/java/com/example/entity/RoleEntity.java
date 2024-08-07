@@ -31,10 +31,18 @@ public class RoleEntity extends BaseEntity {
     @Column(name = "is_active")
     boolean isActive;
 
-    @ManyToMany(mappedBy = "roles")
+    @ManyToMany(fetch = FetchType.LAZY, targetEntity = AccountEntity.class,
+            cascade = { CascadeType.DETACH, CascadeType.MERGE,
+                    CascadeType.REFRESH, CascadeType.PERSIST })
+    @JoinTable(
+            name = "account_role",
+            joinColumns = @JoinColumn(name = "role_id", nullable = false, foreignKey = @ForeignKey(name = "fk_role_account")),
+            inverseJoinColumns = @JoinColumn(name = "account_id", nullable = false, foreignKey = @ForeignKey(name = "fk_account_role"))
+    )
     @OrderBy("id  ASC")
     Set<AccountEntity> accounts;
 
+    // role is owner side of relationship
     @ManyToMany(fetch = FetchType.LAZY, targetEntity = PermissionEntity.class,
             cascade = { CascadeType.DETACH, CascadeType.MERGE,
                     CascadeType.REFRESH, CascadeType.PERSIST })
