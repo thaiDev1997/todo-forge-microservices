@@ -1,13 +1,10 @@
 package com.example.controller;
 
 import com.example.dto.AccountDTO;
-import com.example.exception.BaseResponseException;
 import com.example.service.AccountService;
-import com.example.utils.CoreNumberUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -70,4 +67,8 @@ public class AccountController {
         accountService.deleteProfile(id, profileId);
     }
 
+    @GetMapping(value = "/test")
+    public String test() {
+        return "Hello!!!";
+    }
 }

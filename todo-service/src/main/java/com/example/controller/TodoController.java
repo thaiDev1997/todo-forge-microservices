@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.client.AccountService;
 import com.example.dto.TodoDTO;
 import com.example.service.TodoService;
 import lombok.AccessLevel;
@@ -16,6 +17,7 @@ import java.util.List;
 public class TodoController {
 
     TodoService todoService;
+    AccountService accountService;
 
     @GetMapping
     public List<TodoDTO> getAll() {
@@ -42,5 +44,10 @@ public class TodoController {
     @DeleteMapping(value = "/{id}")
     public void delete(@PathVariable(value = "id") long id) {
         todoService.delete(id);
+    }
+
+    @GetMapping(value = "/test")
+    public String test() {
+        return accountService.test();
     }
 }
