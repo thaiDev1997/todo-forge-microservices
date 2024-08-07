@@ -13,6 +13,7 @@ import com.example.service.AccountService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.*;
 
+@Slf4j
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
@@ -46,6 +48,7 @@ public class AccountServiceImpl implements AccountService {
     @Transactional(readOnly = true)
     @Override
     public List<AccountDTO> getAll() {
+        log.info("Account - getAll");
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<AccountDTO> cq = cb.createQuery(AccountDTO.class);
         Root<AccountEntity> accountRoot = cq.from(AccountEntity.class);

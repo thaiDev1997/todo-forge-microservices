@@ -7,6 +7,7 @@ import com.example.service.TodoService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -20,6 +21,7 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
@@ -30,6 +32,7 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     public List<TodoDTO> getAll() {
+        log.info("Todo - getAll");
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<TodoDTO> cq = cb.createQuery(TodoDTO.class);
         Root<TodoEntity> todoRoot = cq.from(TodoEntity.class);
