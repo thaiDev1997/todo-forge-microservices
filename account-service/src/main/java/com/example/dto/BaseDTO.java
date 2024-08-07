@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BaseDTO implements Serializable {
-    Long id;
+    Long id = 0L;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
 }

@@ -22,7 +22,7 @@ public class BaseEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    Long id = 0L;
 
     @EqualsAndHashCode.Exclude
     @Column(name = "created_at", updatable = false)

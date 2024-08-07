@@ -32,8 +32,10 @@ public class TodoController {
         return todoService.saveOrUpdate(todo);
     }
 
-    @PutMapping
-    public TodoDTO update(@RequestBody TodoDTO todo) {
+    @PutMapping(value = "/{id}")
+    public TodoDTO update(@PathVariable(value = "id") long id,
+                          @RequestBody TodoDTO todo) {
+        todo.setId(id);
         return todoService.saveOrUpdate(todo);
     }
 

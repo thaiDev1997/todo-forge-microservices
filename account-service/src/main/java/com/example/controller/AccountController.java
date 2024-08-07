@@ -1,10 +1,13 @@
 package com.example.controller;
 
 import com.example.dto.AccountDTO;
+import com.example.exception.BaseResponseException;
 import com.example.service.AccountService;
+import com.example.utils.CoreNumberUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,8 +35,10 @@ public class AccountController {
         return accountService.saveOrUpdate(account);
     }
 
-    @PutMapping
-    public AccountDTO update(@RequestBody AccountDTO account) {
+    @PutMapping(value = "/{id}")
+    public AccountDTO update(@PathVariable(value = "id") long id,
+                             @RequestBody AccountDTO account) {
+        account.setId(id);
         return accountService.saveOrUpdate(account);
     }
 
@@ -52,6 +57,17 @@ public class AccountController {
     public void deleteRole(@PathVariable(value = "id") long id,
                            @PathVariable(value = "role-id") long roleId) {
         accountService.deleteRole(id, roleId);
+    }
+
+    @DeleteMapping(value = "/{id}/role")
+    public void deleteAllRoles(@PathVariable(value = "id") long id) {
+        accountService.deleteAllRoles(id);
+    }
+
+    @DeleteMapping(value = "/{id}/profile/{profile-id}")
+    public void deleteProfile(@PathVariable(value = "id") long id,
+                           @PathVariable(value = "profile-id") long profileId) {
+        accountService.deleteProfile(id, profileId);
     }
 
 }

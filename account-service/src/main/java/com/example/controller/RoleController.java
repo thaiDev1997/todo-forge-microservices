@@ -32,8 +32,10 @@ public class RoleController {
         return roleService.saveOrUpdate(role);
     }
 
-    @PutMapping
-    public RoleDTO update(@RequestBody RoleDTO role) {
+    @PutMapping(value = "/{id}")
+    public RoleDTO update(@PathVariable(value = "id") long id,
+                          @RequestBody RoleDTO role) {
+        role.setId(id);
         return roleService.saveOrUpdate(role);
     }
 

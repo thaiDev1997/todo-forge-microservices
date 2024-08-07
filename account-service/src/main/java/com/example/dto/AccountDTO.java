@@ -4,6 +4,7 @@ import com.example.constant.AccountStatus;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Getter
@@ -18,7 +19,7 @@ public class AccountDTO extends BaseDTO {
     String password;
     AccountStatus status;
     LocalDateTime lastLogin;
-    // TODO: profile information
+    ProfileDTO profile;
 
     public AccountDTO(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, String username, String password,
                       AccountStatus status, LocalDateTime lastLogin) {
@@ -27,5 +28,18 @@ public class AccountDTO extends BaseDTO {
         this.password = password;
         this.status = status;
         this.lastLogin = lastLogin;
+    }
+
+    @Getter
+    @Setter
+    @FieldDefaults(level = AccessLevel.PRIVATE)
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ProfileDTO implements Serializable {
+        private static final long serialVersionUID = 1L;
+
+        String firstName;
+        String lastName;
+        String emailAddress;
     }
 }

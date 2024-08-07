@@ -47,8 +47,15 @@ public class AccountEntity extends BaseEntity {
     Set<RoleEntity> roles; // default is HashSet -> not maintain order
 
     @EqualsAndHashCode.Exclude
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "account", cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "account", cascade = CascadeType.ALL)
     ProfileEntity profile;
+
+    public void setProfile(ProfileEntity profile) {
+        if (Objects.nonNull(profile)) {
+            profile.setAccount(this);
+        }
+        this.profile = profile;
+    }
 
     public boolean addRole(RoleEntity role) {
         if (Objects.isNull(this.roles)) this.roles = new HashSet<>();

@@ -3,9 +3,11 @@ package com.example.service.impl;
 import com.example.constant.AccountStatus;
 import com.example.dto.AccountDTO;
 import com.example.entity.AccountEntity;
+import com.example.entity.ProfileEntity;
 import com.example.entity.RoleEntity;
 import com.example.exception.BaseResponseException;
 import com.example.repository.AccountRepository;
+import com.example.repository.ProfileRepository;
 import com.example.repository.RoleRepository;
 import com.example.service.AccountService;
 import lombok.AccessLevel;
@@ -24,10 +26,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -39,6 +38,7 @@ public class AccountServiceImpl implements AccountService {
 
     AccountRepository accountRepository;
     RoleRepository roleRepository;
+    ProfileRepository profileRepository;
 
     // readOnly = true
     // -> hope to omit Dirty Checking & tracking, prevent any write operations
@@ -108,12 +108,18 @@ public class AccountServiceImpl implements AccountService {
             if (Objects.isNull(accountEntity)) {
                 throw new BaseResponseException(HttpStatus.NOT_FOUND);
             }
-            accountEntity.setStatus(account.getStatus());
+            AccountDTO.ProfileDTO profile = account.getProfile();
+            if (Objects.isNull(profile) && Objects.nonNull(accountEntity.getProfile())) {
+                // avoid assign "null" to AccountEntity.profile
+                ProfileEntity profileEntity = accountEntity.getProfile();
+                profile = modelMapper.map(profileEntity, AccountDTO.ProfileDTO.class);
+                account.setProfile(profile);
+            }
+            modelMapper.map(account, accountEntity);
         }
         // TODO: BcryptPassword -> accountEntity.setPassword(account.getPassword());
-        accountRepository.saveAndFlush(accountEntity);
-
-        modelMapper.map(accountEntity, account);
+        accountEntity = accountRepository.saveAndFlush(accountEntity);
+        account.setId(accountEntity.getId());
         return account;
     }
 
@@ -151,5 +157,28 @@ public class AccountServiceImpl implements AccountService {
         boolean result = roles.remove(roleEntity);
         if (!result) throw new BaseResponseException(HttpStatus.BAD_REQUEST);
         accountRepository.save(accountEntity);
+    }
+
+    @Transactional
+    @Override
+    public void deleteAllRoles(long id) {
+        AccountEntity accountEntity = accountRepository.findById(id)
+                .orElseThrow(() -> new BaseResponseException(HttpStatus.NOT_FOUND));
+        Set<RoleEntity> roles = accountEntity.getRoles();
+        // remove all roles out of account
+        roles.clear();
+        accountRepository.save(accountEntity);
+    }
+
+    @Transactional
+    @Override
+    public void deleteProfile(long id, long profileId) {
+        AccountEntity accountEntity = accountRepository.findById(id)
+                .orElseThrow(() -> new BaseResponseException(HttpStatus.NOT_FOUND));
+        ProfileEntity profile = accountEntity.getProfile();
+        if (profileId != profile.getId()) {
+            throw new BaseResponseException(HttpStatus.BAD_REQUEST);
+        }
+        profileRepository.delete(profile);
     }
 }

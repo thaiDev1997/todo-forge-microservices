@@ -17,8 +17,11 @@ import javax.persistence.*;
 public class ProfileEntity extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
+    @Column(name = "first_name")
     String firstName;
+    @Column(name = "last_name")
     String lastName;
+    @Column(name = "email_address")
     String emailAddress;
 
     @EqualsAndHashCode.Exclude

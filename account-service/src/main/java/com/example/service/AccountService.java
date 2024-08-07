@@ -11,4 +11,6 @@ public interface AccountService {
     void delete(long id);
     void saveRole(long id, long roleId);
     void deleteRole(long id, long roleId);
+    void deleteAllRoles(long id);
+    void deleteProfile(long id, long profileId);
 }
