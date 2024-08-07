@@ -22,8 +22,9 @@ import java.util.Set;
 public class AccountEntity extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
-    @Column(updatable = false)
+    @Column(updatable = false, nullable = false)
     String username;
+    @Column(nullable = false)
     String password;
 
     @Enumerated(EnumType.STRING)
@@ -42,8 +43,8 @@ public class AccountEntity extends BaseEntity {
         joinColumns = @JoinColumn(name = "account_id", nullable = false, foreignKey = @ForeignKey(name = "fk_account_role")),
         inverseJoinColumns = @JoinColumn(name = "role_id", nullable = false, foreignKey = @ForeignKey(name = "fk_role_account"))
     )
-    @OrderBy("id, title ASC")
-    Set<RoleEntity> roles;
+    // @OrderBy("id, title ASC") -> use TreeSet or List instead of
+    Set<RoleEntity> roles; // default is HashSet -> not maintain order
 
     @EqualsAndHashCode.Exclude
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "account", cascade = { CascadeType.PERSIST, CascadeType.REMOVE })

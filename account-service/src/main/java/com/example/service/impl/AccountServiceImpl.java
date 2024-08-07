@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -82,7 +83,11 @@ public class AccountServiceImpl implements AccountService {
         List<Predicate> predicates = new ArrayList<>();
         predicates.add(cb.equal(accountRoot.get("id"), id));
         cq.where(predicates.toArray(new Predicate[0]));
-        return entityManager.createQuery(cq).getSingleResult();
+        try {
+            return entityManager.createQuery(cq).getSingleResult();
+        } catch (NoResultException noResultException) {
+            return null;
+        }
     }
 
     @Transactional

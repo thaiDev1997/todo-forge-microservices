@@ -21,7 +21,7 @@ public class ResourceEntity extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     String title;
-    @Column(updatable = false)
+    @Column(updatable = false, nullable = false)
     String code;
     String description;
 

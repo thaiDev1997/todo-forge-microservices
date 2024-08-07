@@ -28,6 +28,7 @@ public class PermissionEntity extends BaseEntity {
     @Column(name = "is_active")
     boolean isActive;
 
+    @Column(nullable = false)
     @EqualsAndHashCode.Include
     @Convert(converter = ScopeConverter.class) // name property rather than enum name
     ScopePermission scope;
@@ -40,7 +41,7 @@ public class PermissionEntity extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "role_id", nullable = false), foreignKey = @ForeignKey(name = "fk_role_permission"),
             joinColumns = @JoinColumn(name = "permission_id", nullable = false, foreignKey = @ForeignKey(name = "fk_permission_role"))
     )
-    @OrderBy("id, title ASC")
+    // @OrderBy("id, title ASC") -> use TreeSet or List instead of
     Set<RoleEntity> roles;
 
     @ManyToOne

@@ -10,6 +10,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -36,9 +37,10 @@ public class TodoServiceImpl implements TodoService {
         cq.select(cb.construct(
                 TodoDTO.class,
                 todoRoot.get("id"),
+                todoRoot.get("createdAt"),
+                todoRoot.get("updatedAt"),
                 todoRoot.get("name"),
-                todoRoot.get("status"),
-                todoRoot.get("createdAt")
+                todoRoot.get("status")
         ));
         return entityManager.createQuery(cq).getResultList();
     }
@@ -52,14 +54,19 @@ public class TodoServiceImpl implements TodoService {
         cq.select(cb.construct(
                 TodoDTO.class,
                 todoRoot.get("id"),
+                todoRoot.get("createdAt"),
+                todoRoot.get("updatedAt"),
                 todoRoot.get("name"),
-                todoRoot.get("status"),
-                todoRoot.get("createdAt")
+                todoRoot.get("status")
         ));
         List<Predicate> predicates = new ArrayList<>();
         predicates.add(cb.equal(todoRoot.get("id"), id));
         cq.where(predicates.toArray(new Predicate[0]));
-        return entityManager.createQuery(cq).getSingleResult();
+        try {
+            return entityManager.createQuery(cq).getSingleResult();
+        } catch (NoResultException noResultException) {
+            return null;
+        }
     }
 
     @Transactional
@@ -72,7 +79,6 @@ public class TodoServiceImpl implements TodoService {
         } else {
             todoEntity = todoRepository.getReferenceById(id);
             todoEntity.setStatus(todo.getStatus());
-
         }
         todoEntity.setName(todo.getName());
         todo.setId(todo.getId());

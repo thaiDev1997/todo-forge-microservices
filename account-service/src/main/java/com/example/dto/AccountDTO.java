@@ -19,4 +19,13 @@ public class AccountDTO extends BaseDTO {
     AccountStatus status;
     LocalDateTime lastLogin;
     // TODO: profile information
+
+    public AccountDTO(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, String username, String password,
+                      AccountStatus status, LocalDateTime lastLogin) {
+        super(id, createdAt, updatedAt);
+        this.username = username;
+        this.password = password;
+        this.status = status;
+        this.lastLogin = lastLogin;
+    }
 }

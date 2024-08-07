@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -106,7 +107,11 @@ public class ResourceServiceImpl implements ResourceService {
         List<Predicate> predicates = new ArrayList<>();
         predicates.add(cb.equal(resourceRoot.get("id"), id));
         cq.where(predicates.toArray(new Predicate[0]));
-        return entityManager.createQuery(cq).getSingleResult();
+        try {
+            return entityManager.createQuery(cq).getSingleResult();
+        } catch (NoResultException noResultException) {
+            return null;
+        }
     }
 
     @Transactional

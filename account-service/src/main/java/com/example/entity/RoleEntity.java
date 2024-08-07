@@ -21,8 +21,8 @@ public class RoleEntity extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     String title; // eg: Administrator
-    @Column(updatable = false)
 
+    @Column(updatable = false, nullable = false)
     @EqualsAndHashCode.Include
     String code; // eg: ROLE_ADMIN
 
@@ -39,7 +39,7 @@ public class RoleEntity extends BaseEntity {
             joinColumns = @JoinColumn(name = "role_id", nullable = false, foreignKey = @ForeignKey(name = "fk_role_account")),
             inverseJoinColumns = @JoinColumn(name = "account_id", nullable = false, foreignKey = @ForeignKey(name = "fk_account_role"))
     )
-    @OrderBy("id  ASC")
+    // @OrderBy("id ASC") -> use TreeSet or List instead of
     Set<AccountEntity> accounts;
 
     // role is owner side of relationship
@@ -51,7 +51,7 @@ public class RoleEntity extends BaseEntity {
         joinColumns = @JoinColumn(name = "role_id", nullable = false), foreignKey = @ForeignKey(name = "fk_role_permission"),
         inverseJoinColumns = @JoinColumn(name = "permission_id", nullable = false, foreignKey = @ForeignKey(name = "fk_permission_role"))
     )
-    @OrderBy("id, title ASC")
+    // @OrderBy("id, title ASC") -> use TreeSet or List instead of
     Set<PermissionEntity> permissions;
 
     public boolean addPermission(PermissionEntity permission) {
