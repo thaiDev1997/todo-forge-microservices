@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @Getter
@@ -15,7 +16,9 @@ import java.time.LocalDateTime;
 public class ResourceDTO extends BaseDTO {
     private static final long serialVersionUID = 1L;
 
+    @NotBlank
     String title;
+    @NotBlank
     String code;
     String description;
     @JsonProperty("isActive")

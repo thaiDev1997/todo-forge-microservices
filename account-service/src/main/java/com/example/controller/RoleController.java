@@ -5,10 +5,14 @@ import com.example.service.RoleService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.List;
 
+@Validated
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
 @RestController
@@ -23,36 +27,36 @@ public class RoleController {
     }
 
     @GetMapping(value = "/{id}")
-    public RoleDTO getDetail(@PathVariable(value = "id") long id) {
+    public RoleDTO getDetail(@PathVariable(value = "id") @Min(1) long id) {
         return roleService.getDetail(id);
     }
 
     @PostMapping
-    public RoleDTO save(@RequestBody RoleDTO role) {
+    public RoleDTO save(@Valid @RequestBody RoleDTO role) {
         return roleService.saveOrUpdate(role);
     }
 
     @PutMapping(value = "/{id}")
-    public RoleDTO update(@PathVariable(value = "id") long id,
+    public RoleDTO update(@PathVariable(value = "id") @Min(1) long id,
                           @RequestBody RoleDTO role) {
         role.setId(id);
         return roleService.saveOrUpdate(role);
     }
 
     @DeleteMapping(value = "/{id}")
-    public void delete(@PathVariable(value = "id") long id) {
+    public void delete(@PathVariable(value = "id") @Min(1) long id) {
         roleService.delete(id);
     }
 
     @PostMapping(value = "/{id}/permissions/{permission-id}")
-    public void savePermission(@PathVariable(value = "id") long roleId,
-                               @PathVariable(value = "permission-id") long permissionId) {
+    public void savePermission(@PathVariable(value = "id") @Min(1) long roleId,
+                               @PathVariable(value = "permission-id") @Min(1) long permissionId) {
         roleService.savePermission(roleId, permissionId);
     }
 
     @DeleteMapping(value = "/{id}/permissions/{permission-id}")
-    public void deletePermission(@PathVariable(value = "id") long roleId,
-                                 @PathVariable(value = "permission-id") long permissionId) {
+    public void deletePermission(@PathVariable(value = "id") @Min(1) long roleId,
+                                 @PathVariable(value = "permission-id") @Min(1) long permissionId) {
         roleService.deletePermission(roleId, permissionId);
     }
 }

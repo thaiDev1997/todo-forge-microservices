@@ -6,10 +6,14 @@ import com.example.service.TodoService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.List;
 
+@Validated
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
 @RestController
@@ -25,24 +29,24 @@ public class TodoController {
     }
 
     @GetMapping(value = "/{id}")
-    public TodoDTO getDetail(@PathVariable(value = "id") long id) {
+    public TodoDTO getDetail(@PathVariable(value = "id") @Min(1) long id) {
         return todoService.getDetail(id);
     }
 
     @PostMapping
-    public TodoDTO save(@RequestBody TodoDTO todo) {
+    public TodoDTO save(@Valid @RequestBody TodoDTO todo) {
         return todoService.saveOrUpdate(todo);
     }
 
     @PutMapping(value = "/{id}")
-    public TodoDTO update(@PathVariable(value = "id") long id,
+    public TodoDTO update(@PathVariable(value = "id") @Min(1) long id,
                           @RequestBody TodoDTO todo) {
         todo.setId(id);
         return todoService.saveOrUpdate(todo);
     }
 
     @DeleteMapping(value = "/{id}")
-    public void delete(@PathVariable(value = "id") long id) {
+    public void delete(@PathVariable(value = "id") @Min(1) long id) {
         todoService.delete(id);
     }
 

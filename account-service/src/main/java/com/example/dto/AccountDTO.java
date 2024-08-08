@@ -4,6 +4,8 @@ import com.example.constant.AccountStatus;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -15,8 +17,11 @@ import java.time.LocalDateTime;
 public class AccountDTO extends BaseDTO {
     private static final long serialVersionUID = 1L;
 
+    @NotBlank
     String username;
+    @NotBlank
     String password;
+    @NotNull
     AccountStatus status;
     LocalDateTime lastLogin;
     ProfileDTO profile;
