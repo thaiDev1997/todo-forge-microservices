@@ -38,8 +38,8 @@ public class PermissionEntity extends BaseEntity {
                 CascadeType.REFRESH, CascadeType.PERSIST })
     @JoinTable(
             name = "role_permission",
-            inverseJoinColumns = @JoinColumn(name = "role_id", nullable = false), foreignKey = @ForeignKey(name = "fk_role_permission"),
-            joinColumns = @JoinColumn(name = "permission_id", nullable = false, foreignKey = @ForeignKey(name = "fk_permission_role"))
+            inverseJoinColumns = @JoinColumn(name = "role_id", nullable = false),
+            joinColumns = @JoinColumn(name = "permission_id", nullable = false)
     )
     // @OrderBy("id, title ASC") -> use TreeSet or List instead of
     Set<RoleEntity> roles;
