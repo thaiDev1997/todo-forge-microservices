@@ -157,6 +157,7 @@ public class ResourceServiceImpl implements ResourceService {
         PermissionEntity permissionEntity = modelMapper.map(permission, PermissionEntity.class);
         boolean result = resource.addPermission(permissionEntity);
         if (!result) throw new BaseResponseException(HttpStatus.CONFLICT); // permission already saves
+        permissionEntity.setActive(true);
         resourceRepository.save(resource);
     }
 

@@ -4,12 +4,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
+
 @RestController
-@RequestMapping(value = "/api/v1")
+@RequestMapping(value = "/api/v1/auth")
 public class AuthController {
 
-    @GetMapping(value = "/test")
-    public String test() {
-        return "HELLO";
+    @GetMapping("/me")
+    public Principal me(Principal principal) {
+        return principal;
     }
 }

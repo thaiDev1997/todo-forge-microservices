@@ -1,5 +1,6 @@
 package com.example.entity;
 
+import com.example.dto.AccountPermissionDTO;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -11,12 +12,23 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+@SqlResultSetMapping(
+    name = AccountPermissionDTO.ResourcePermission.GET_RESOURCE_PERMISSION_MAPPING,
+    classes =
+        @ConstructorResult(
+            targetClass = AccountPermissionDTO.ResourcePermission.class,
+            columns = {
+                @ColumnResult(name = "code", type = String.class),
+                @ColumnResult(name = "scope", type = String.class)
+            }
+        )
+)
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-@Table(name = "role")
+@Table(name = "\"role\"")
 public class RoleEntity extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
@@ -57,6 +69,6 @@ public class RoleEntity extends BaseEntity {
     public boolean addPermission(PermissionEntity permission) {
         if (Objects.isNull(this.permissions)) this.permissions = new HashSet<>();
         return this.permissions.add(permission);
-                // doesn't need this: && permission.addRole(this);
+        // doesn't need this: && permission.addRole(this);
     }
 }

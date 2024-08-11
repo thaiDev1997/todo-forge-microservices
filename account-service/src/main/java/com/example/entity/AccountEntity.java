@@ -30,7 +30,7 @@ public class AccountEntity extends BaseEntity {
     @Enumerated(EnumType.STRING)
     AccountStatus status;
 
-    @Column(name = "last_login")
+    @Column(name = "last_login", insertable = false)
     LocalDateTime lastLogin;
 
     // account is owner side of relationship

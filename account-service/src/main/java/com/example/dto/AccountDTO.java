@@ -35,6 +35,15 @@ public class AccountDTO extends BaseEntityDTO {
         this.lastLogin = lastLogin;
     }
 
+    public AccountDTO(Long id, String username, String password, AccountStatus status, LocalDateTime lastLogin, ProfileDTO profile) {
+        super(id);
+        this.username = username;
+        this.password = password;
+        this.status = status;
+        this.lastLogin = lastLogin;
+        this.profile = profile;
+    }
+
     @Getter
     @Setter
     @FieldDefaults(level = AccessLevel.PRIVATE)

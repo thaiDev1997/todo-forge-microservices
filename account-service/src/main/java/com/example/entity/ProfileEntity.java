@@ -24,6 +24,10 @@ public class ProfileEntity extends BaseEntity {
     @Column(name = "email_address")
     String emailAddress;
 
+    @Column(name = "account_id", nullable = false,
+            insertable = false, updatable = false) // read_only
+    Long accountId;
+
     @EqualsAndHashCode.Exclude
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id", foreignKey = @ForeignKey(name = "fk_account_profile"))

@@ -2,6 +2,7 @@ package com.example.service.impl;
 
 import com.example.constant.AccountStatus;
 import com.example.dto.AccountDTO;
+import com.example.dto.AccountPermissionDTO;
 import com.example.entity.AccountEntity;
 import com.example.entity.ProfileEntity;
 import com.example.entity.RoleEntity;
@@ -20,14 +21,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
+import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.util.*;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static com.example.dto.AccountPermissionDTO.AccountRoleDTO;
+import static com.example.dto.AccountPermissionDTO.ResourcePermission;
 
 @Slf4j
 @Service
@@ -183,5 +190,52 @@ public class AccountServiceImpl implements AccountService {
             throw new BaseResponseException(HttpStatus.BAD_REQUEST);
         }
         profileRepository.delete(profile);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public AccountPermissionDTO getByUsername(String username) {
+        // map by Constructor
+        String jpql = "SELECT new " + AccountRoleDTO.class.getName() + "(account.id, account.username, account.password, " +
+                "account.status, account.lastLogin, profile.firstName, profile.lastName, profile.emailAddress) " +
+                "FROM " + AccountEntity.class.getName() + " account " +
+                "INNER JOIN " + ProfileEntity.class.getName() + " profile ON account.id = profile.accountId " +
+                "WHERE account.username = :username AND account.status = :status";
+        TypedQuery<AccountRoleDTO> query = entityManager.createQuery(jpql, AccountRoleDTO.class);
+        query.setParameter("username", username);
+        query.setParameter("status", AccountStatus.ACTIVE);
+        // account
+        AccountRoleDTO account = query.getSingleResult();
+        if (Objects.isNull(account)) throw new BaseResponseException(HttpStatus.NOT_FOUND);
+
+        long accountId = account.getId();
+        List<Object[]> roleIdCodes = roleRepository.roles(accountId);
+        if (CollectionUtils.isEmpty(roleIdCodes)) throw new BaseResponseException(HttpStatus.NOT_FOUND);
+        List<String> roleCodes = roleIdCodes
+                .parallelStream()
+                .map(objects -> (String) objects[1])
+                .collect(Collectors.toList());
+        account.setRoles(roleCodes);
+
+        List<Long> roleIds = roleIdCodes
+                .parallelStream()
+                .map(objects -> ((BigInteger) objects[0]).longValue())
+                .collect(Collectors.toList());
+        List<ResourcePermission> resourcePermissions = this.getResourcePermissions(accountId, roleIds);
+        return new AccountPermissionDTO(account, resourcePermissions);
+    }
+
+    private List<ResourcePermission> getResourcePermissions(long accountId, List<Long> roleIds) {
+        String nativeSQL = "SELECT  r.code, p.scope " +
+                "FROM role role " +
+                "INNER JOIN account_role acc_role ON role.id = acc_role.role_id AND acc_role.account_id = :accountId " +
+                "INNER JOIN role_permission role_per ON role.id = role_per.role_id " +
+                "INNER JOIN permission p ON role_per.permission_id = p.id AND p.is_active = TRUE " +
+                "INNER JOIN resource r ON p.resource_id = r.id AND r.is_active = TRUE " +
+                "WHERE role.is_active = true and role.id IN (:roleIds)";
+        Query nativeQuery = entityManager.createNativeQuery(nativeSQL, ResourcePermission.GET_RESOURCE_PERMISSION_MAPPING);
+        nativeQuery.setParameter("accountId", accountId);
+        nativeQuery.setParameter("roleIds", roleIds);
+        return nativeQuery.getResultList();
     }
 }

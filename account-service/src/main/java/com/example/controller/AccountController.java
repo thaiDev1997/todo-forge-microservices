@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import com.example.dto.AccountDTO;
+import com.example.dto.AccountPermissionDTO;
 import com.example.service.AccountService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @Validated
@@ -71,8 +73,14 @@ public class AccountController {
         accountService.deleteProfile(id, profileId);
     }
 
+    @GetMapping(value = "/username/{username}")
+    public AccountPermissionDTO getByUsername(@PathVariable(value = "username") @NotBlank String username) {
+        return accountService.getByUsername(username);
+    }
+
     @GetMapping(value = "/test")
     public String test() {
         return "Hello!!!";
     }
+
 }

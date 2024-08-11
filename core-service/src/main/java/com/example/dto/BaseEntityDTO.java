@@ -15,4 +15,8 @@ public class BaseEntityDTO implements Serializable {
     Long id = 0L;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
+
+    public BaseEntityDTO(Long id) {
+        this.id = id;
+    }
 }
