@@ -1,5 +1,7 @@
 package com.example;
 
+import com.example.controller.CustomErrorDecoder;
+import feign.codec.ErrorDecoder;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.cloud.openfeign.EnableFeignClients;
@@ -17,5 +19,10 @@ public class CoreConfig {
                 .setFieldAccessLevel(org.modelmapper.config.Configuration.AccessLevel.PRIVATE)
                 .setMatchingStrategy(MatchingStrategies.STRICT);
         return modelMapper;
+    }
+
+    @Bean
+    public ErrorDecoder errorDecoder() {
+        return new CustomErrorDecoder();
     }
 }
