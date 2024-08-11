@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountDTO extends BaseDTO {
+public class AccountDTO extends BaseEntityDTO {
     private static final long serialVersionUID = 1L;
 
     @NotBlank

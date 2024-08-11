@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @NoArgsConstructor
 @AllArgsConstructor
-public class TodoDTO extends BaseDTO {
+public class TodoDTO extends BaseEntityDTO {
     private static final long serialVersionUID = 1L;
 
     @NotBlank

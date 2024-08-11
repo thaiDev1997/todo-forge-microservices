@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor
 @NoArgsConstructor
-public class BaseDTO implements Serializable {
+public class BaseEntityDTO implements Serializable {
     Long id = 0L;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;

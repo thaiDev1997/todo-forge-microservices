@@ -1,6 +1,5 @@
 package com.example.dto;
 
-import com.example.entity.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -13,7 +12,7 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResourceDTO extends BaseDTO {
+public class ResourceDTO extends BaseEntityDTO {
     private static final long serialVersionUID = 1L;
 
     @NotBlank
