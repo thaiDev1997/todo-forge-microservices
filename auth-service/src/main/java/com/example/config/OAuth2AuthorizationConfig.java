@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -23,16 +24,23 @@ import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFacto
 
 import java.util.Map;
 
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
 @Configuration
 @EnableAuthorizationServer
 public class OAuth2AuthorizationConfig extends AuthorizationServerConfigurerAdapter {
 
-    PasswordEncoder passwordEncoder;
-    UserDetailsService userDetailsService;
-    AuthenticationManager authenticationManager;
-    OAuth2ClientProperties oAuth2ClientProperties;
+    final PasswordEncoder passwordEncoder;
+    final UserDetailsService userDetailsService;
+    final AuthenticationManager authenticationManager;
+    final OAuth2ClientProperties oAuth2ClientProperties;
+
+    @Value("${oauth2.key-store.path}")
+    String keyStorePath;
+    @Value("${oauth2.key-store.password}")
+    String keyStorePassword;
+    @Value("${oauth2.key-store.alias}")
+    String keyStoreAlias;
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
@@ -48,6 +56,7 @@ public class OAuth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
                     .authorizedGrantTypes(oauth2Client.getGrantTypes())
                     .scopes(oauth2Client.getScopes())
                     .redirectUris(oauth2Client.getRedirectUris())
+                    // clients can override general Validity Second
                     .accessTokenValiditySeconds(ObjectUtils.defaultIfNull(oauth2Client.getAccessTokenValidity(), accessTokenValidity))
                     .refreshTokenValiditySeconds(ObjectUtils.defaultIfNull(oauth2Client.getRefreshTokenValidity(), refreshTokenValidity));
         }
@@ -93,14 +102,11 @@ public class OAuth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
 
     @Bean
     public JwtAccessTokenConverter accessTokenConverter() {
-        String keyStorePath = "todo-forge.jks";
-        String keystorePassword = "todo-forge-123456";
-        String keystoreAlias = "todo-forge";
         ClassPathResource classPathResource = new ClassPathResource(keyStorePath);
-        KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(classPathResource, keystorePassword.toCharArray());
+        KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(classPathResource, keyStorePassword.toCharArray());
 
         JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-        converter.setKeyPair(keyStoreKeyFactory.getKeyPair(keystoreAlias));
+        converter.setKeyPair(keyStoreKeyFactory.getKeyPair(keyStoreAlias));
         return converter;
     }
 }

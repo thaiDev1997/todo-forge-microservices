@@ -19,3 +19,7 @@ oauth2:
           - write
         redirect-uris:
           - https://oauthdebugger.com/debug
+  key-store:
+    path: todo-forge.jks
+    password: todo-forge-123456
+    alias: todo-forge
