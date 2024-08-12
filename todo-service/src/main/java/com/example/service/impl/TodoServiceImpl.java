@@ -2,12 +2,14 @@ package com.example.service.impl;
 
 import com.example.dto.TodoDTO;
 import com.example.entity.TodoEntity;
+import com.example.exception.BaseResponseException;
 import com.example.repository.TodoRepository;
 import com.example.service.TodoService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -68,7 +70,7 @@ public class TodoServiceImpl implements TodoService {
         try {
             return entityManager.createQuery(cq).getSingleResult();
         } catch (NoResultException noResultException) {
-            return null;
+            throw new BaseResponseException(HttpStatus.NOT_FOUND);
         }
     }
 
@@ -93,7 +95,8 @@ public class TodoServiceImpl implements TodoService {
     @Override
     public void delete(long id) {
         if (id > 0) {
-            todoRepository.deleteById(id);
+            todoRepository.findById(id)
+                    .ifPresent(todoRepository::delete);
         }
     }
 }
