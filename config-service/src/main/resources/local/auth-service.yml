@@ -1,1 +1,21 @@
 server.port: 8083
+
+oauth2:
+  client:
+    access-token-validity: 600
+    refresh-token-validity: 2592000
+    clients:
+      todo-forge:
+        client-id: todo-forge
+        client-secret: 123
+        grant-types:
+          - authorization_code
+          - refresh_token
+          - implicit
+          - password
+          - client_credentials
+        scopes:
+          - read
+          - write
+        redirect-uris:
+          - https://oauthdebugger.com/debug
