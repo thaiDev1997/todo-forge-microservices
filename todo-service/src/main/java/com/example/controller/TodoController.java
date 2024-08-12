@@ -1,6 +1,5 @@
 package com.example.controller;
 
-import com.example.client.AccountService;
 import com.example.dto.TodoDTO;
 import com.example.service.TodoService;
 import lombok.AccessLevel;
@@ -10,7 +9,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.security.PermitAll;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.util.List;
@@ -23,7 +21,6 @@ import java.util.List;
 public class TodoController {
 
     TodoService todoService;
-    AccountService accountService;
 
     @PreAuthorize("hasAuthority('todo:read')")
     @GetMapping
@@ -55,10 +52,5 @@ public class TodoController {
     @DeleteMapping(value = "/{id}")
     public void delete(@PathVariable(value = "id") @Min(1) long id) {
         todoService.delete(id);
-    }
-
-    @GetMapping(value = "/test")
-    public String test() {
-        return accountService.test();
     }
 }

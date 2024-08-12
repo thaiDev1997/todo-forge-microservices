@@ -1,6 +1,10 @@
 server.port: 8083
 
 oauth2:
+  key-store:
+    path: todo-forge.jks
+    password: todo-forge-123456
+    alias: todo-forge
   client:
     access-token-validity: 600
     refresh-token-validity: 2592000
@@ -13,13 +17,33 @@ oauth2:
           - refresh_token
           - implicit
           - password
-          - client_credentials
         scopes:
           - read
           - write
         redirect-uris:
           - https://oauthdebugger.com/debug
-  key-store:
-    path: todo-forge.jks
-    password: todo-forge-123456
-    alias: todo-forge
+      account-service:
+        client-id: account-service
+        client-secret: 123
+        grant-types:
+          - client_credentials
+        scopes:
+          - read
+        access-token-validity: 100
+        refresh-token-validity: 0
+      todo-service:
+        client-id: todo-service
+        client-secret: 123
+        grant-types:
+          - client_credentials
+        scopes:
+          - read
+        access-token-validity: 100
+        refresh-token-validity: 0
+  internal-client-credentials:
+    account-service:
+      client-id: account-service
+      client-secret: 123
+    todo-service:
+      client-id: todo-service
+      client-secret: 123

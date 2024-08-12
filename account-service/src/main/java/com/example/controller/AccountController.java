@@ -78,9 +78,4 @@ public class AccountController {
         return accountService.getByUsername(username);
     }
 
-    @GetMapping(value = "/test")
-    public String test() {
-        return "Hello!!!";
-    }
-
 }

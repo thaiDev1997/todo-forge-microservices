@@ -11,6 +11,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.config.annotation.builders.InMemoryClientDetailsServiceBuilder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -24,6 +25,7 @@ import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFacto
 
 import java.util.Map;
 
+@SuppressWarnings("deprecation")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
 @Configuration
@@ -48,14 +50,15 @@ public class OAuth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
         int accessTokenValidity = oAuth2ClientProperties.getAccessTokenValidity();
         int refreshTokenValidity = oAuth2ClientProperties.getRefreshTokenValidity();
 
+        InMemoryClientDetailsServiceBuilder inMemoryBuilder = clients.inMemory();
         for (Map.Entry<String, OAuth2ClientProperties.OAuth2Client> oauth2ClientEntry : oauth2Clients.entrySet()) {
             OAuth2ClientProperties.OAuth2Client oauth2Client = oauth2ClientEntry.getValue();
-            clients.inMemory()
+            inMemoryBuilder
                     .withClient(oauth2Client.getClientId())
                     .secret(passwordEncoder.encode(oauth2Client.getClientSecret()))
                     .authorizedGrantTypes(oauth2Client.getGrantTypes())
                     .scopes(oauth2Client.getScopes())
-                    .redirectUris(oauth2Client.getRedirectUris())
+                    .redirectUris(ObjectUtils.defaultIfNull(oauth2Client.getRedirectUris(), new String[]{}))
                     // clients can override general Validity Second
                     .accessTokenValiditySeconds(ObjectUtils.defaultIfNull(oauth2Client.getAccessTokenValidity(), accessTokenValidity))
                     .refreshTokenValiditySeconds(ObjectUtils.defaultIfNull(oauth2Client.getRefreshTokenValidity(), refreshTokenValidity));

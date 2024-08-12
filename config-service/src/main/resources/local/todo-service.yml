@@ -24,3 +24,8 @@ spring:
         format_sql: 'true'
     hibernate:
       ddl-auto: update
+oauth2:
+  internal-client-credentials:
+    account-service:
+      client-id: account-service
+      client-secret: 123

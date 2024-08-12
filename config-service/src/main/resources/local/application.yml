@@ -16,3 +16,5 @@ feign:
       default:
         read-timeout: 5000
         connect-timeout: 5000
+oauth2:
+  access-token-uri: http://localhost:8083/oauth/token
