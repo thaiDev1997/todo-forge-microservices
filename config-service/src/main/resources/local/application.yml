@@ -1,5 +1,5 @@
 eureka:
-  client.service-url.defaultZone: ${EUREKA_HOST:http://localhost:8081}/eureka/ # must be defaultZone, not default-zone
+  client.service-url.defaultZone: ${DISCOVERY_HOST:http://localhost:8081}/eureka/ # must be defaultZone, not default-zone
   instance.prefer-ip-address: true
 springdoc:
   swagger-ui:
@@ -18,16 +18,15 @@ feign:
         connect-timeout: 5000
 
 internal-services:
+  gateway-service:
+    name: gateway-service
+    url: ${GATEWAY_HOST:http://localhost:8082}
   auth-service:
     name: auth-service
-    url: ${AUTH-SERVICE_HOST:http://localhost:8083}
   todo-service:
     name: todo-service
-    url: ${TODO-SERVICE_HOST:http://localhost:8084}
   account-service:
     name: account-service
-    url: ${ACCOUNT-SERVICE_HOST:http://localhost:8085}
-
 
 oauth2:
-  access-token-uri: ${AUTH-SERVICE_HOST:http://localhost:8083}/oauth/token
+  access-token-uri: ${GATEWAY_HOST:http://localhost:8082}/auth/oauth/token

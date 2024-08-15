@@ -68,7 +68,7 @@ services:
     command: [ "java", "-jar", "gateway-service.jar" ]
     environment:
       - CONFIG_HOST=http://config-service:8080
-      - EUREKA_HOST=http://discovery-service:8081
+      - DISCOVERY_HOST=http://discovery-service:8081
     depends_on:
       - config-service
   auth-service:
@@ -85,10 +85,8 @@ services:
     environment:
       - ZIPKIN_HOST=http://zipkin:9411
       - CONFIG_HOST=http://config-service:8080
-      - EUREKA_HOST=http://discovery-service:8081
-      - AUTH-SERVICE_HOST=http://auth-service:8083
-      - TODO-SERVICE_HOST=http://todo-service:8084
-      - ACCOUNT-SERVICE_HOST=http://account-service:8085
+      - DISCOVERY_HOST=http://discovery-service:8081
+      - GATEWAY_HOST=http://gateway-service:8082
     depends_on:
       - zipkin
       - config-service
@@ -111,10 +109,8 @@ services:
       - DB_PASSWORD=dev
       - ZIPKIN_HOST=http://zipkin:9411
       - CONFIG_HOST=http://config-service:8080
-      - EUREKA_HOST=http://discovery-service:8081
-      - AUTH-SERVICE_HOST=http://auth-service:8083
-      - TODO-SERVICE_HOST=http://todo-service:8084
-      - ACCOUNT-SERVICE_HOST=http://account-service:8085
+      - DISCOVERY_HOST=http://discovery-service:8081
+      - GATEWAY_HOST=http://gateway-service:8082
     depends_on:
       - database
       - zipkin
@@ -138,10 +134,8 @@ services:
       - DB_PASSWORD=dev
       - ZIPKIN_HOST=http://zipkin:9411
       - CONFIG_HOST=http://config-service:8080
-      - EUREKA_HOST=http://discovery-service:8081
-      - AUTH-SERVICE_HOST=http://auth-service:8083
-      - TODO-SERVICE_HOST=http://todo-service:8084
-      - ACCOUNT-SERVICE_HOST=http://account-service:8085
+      - DISCOVERY_HOST=http://discovery-service:8081
+      - GATEWAY_HOST=http://gateway-service:8082
     depends_on:
       - database
       - zipkin

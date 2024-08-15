@@ -12,8 +12,8 @@ import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
 import org.springframework.security.oauth2.client.token.grant.client.ClientCredentialsResourceDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 
-@FeignClient(name = "${internal-services.account-service.name}", url = "${internal-services.account-service.url}",
-            path = "/api/v1", configuration = AccountFeignClientConfiguration.class)
+@FeignClient(name = "${internal-services.account-service.name}", url = "${internal-services.gateway-service.url}",
+            path = "/account/api/v1", configuration = AccountFeignClientConfiguration.class)
 public interface AccountService {
 
     @GetMapping(value = "/app/name")
