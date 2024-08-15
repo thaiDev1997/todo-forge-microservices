@@ -24,4 +24,14 @@
             <artifactId>spring-cloud-starter-gateway</artifactId>
         </dependency>
     </dependencies>
+
+    <build>
+        <finalName>gateway-service</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>

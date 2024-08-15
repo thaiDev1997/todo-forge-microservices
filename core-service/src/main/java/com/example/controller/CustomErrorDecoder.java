@@ -24,6 +24,7 @@ public class CustomErrorDecoder implements ErrorDecoder {
             log.error(ObjectUtils.defaultIfNull(message, e.getMessage()), e);
             if (Objects.isNull(message)) message = "Feign Proxy Exception";
         }
+        log.error(message);
         return new BaseResponseException(message, HttpStatus.resolve(response.status()));
     }
 }

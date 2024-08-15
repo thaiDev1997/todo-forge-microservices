@@ -15,6 +15,38 @@ spring.cloud:
         allowedHeaders: # allowed headers
           - "*"
     routes:
+      - id: auth # auth-service
+        uri: lb://auth-service
+        predicates:
+          - Path=/auth/**
+        filters:
+          - StripPrefix=1
+        metadata:
+          cors:
+            allowedOrigins: '*'
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders: '*'
+      - id: account # account-service
+        uri: lb://account-service
+        predicates:
+          - Path=/account/**
+        filters:
+          - StripPrefix=1
+        metadata:
+          cors:
+            allowedOrigins: '*'
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders: '*'
       - id: todo # todo-service
         uri: lb://todo-service
         predicates:

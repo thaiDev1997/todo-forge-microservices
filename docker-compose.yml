@@ -1,0 +1,150 @@
+# docker-compose --file docker-compose.yml up --build -d
+# docker-compose --file docker-compose.yml down
+
+networks:
+  todo-forge-network:
+    driver: bridge
+
+services:
+  database:
+    image: "mysql:latest"
+    container_name: database
+    networks:
+      - todo-forge-network
+    restart: always
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./container_vol/database:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=dev
+  zipkin:
+    image: "openzipkin/zipkin:latest"
+    container_name: zipkin
+    networks:
+      - todo-forge-network
+    restart: always
+    ports:
+      - "9411:9411"
+  config-service:
+    build: ./config-service
+    container_name: config-service
+    networks:
+      - todo-forge-network
+    restart: always
+    working_dir: /app
+    #volumes:
+    #  - ./config-service/target/config-service.jar:/app/config-service.jar
+    ports:
+      - "8080:8080"
+    command: ["java", "-jar", "config-service.jar"]
+  discovery-service:
+    build: ./discovery-service
+    container_name: discovery-service
+    networks:
+      - todo-forge-network
+    restart: always
+    working_dir: /app
+    #volumes:
+    #  - ./discovery-service/target/discovery-service.jar:/app/discovery-service.jar
+    ports:
+      - "8081:8081"
+    command: [ "java", "-jar", "discovery-service.jar" ]
+    environment:
+      - CONFIG_HOST=http://config-service:8080
+    depends_on:
+      - config-service
+  gateway-service:
+    build: ./gateway-service
+    container_name: gateway-service
+    networks:
+      - todo-forge-network
+    restart: always
+    working_dir: /app
+    #volumes:
+    #  - ./gateway-service/target/gateway-service.jar:/app/gateway-service.jar
+    ports:
+      - 8082:8082
+    command: [ "java", "-jar", "gateway-service.jar" ]
+    environment:
+      - CONFIG_HOST=http://config-service:8080
+      - EUREKA_HOST=http://discovery-service:8081
+    depends_on:
+      - config-service
+  auth-service:
+    build: ./auth-service
+    container_name: auth-service
+    networks:
+      - todo-forge-network
+    restart: always
+    working_dir: /app
+    #volumes:
+    #  - ./auth-service/target/auth-service.jar:/app/auth-service.jar
+    ports:
+      - 8083:8083
+    environment:
+      - ZIPKIN_HOST=http://zipkin:9411
+      - CONFIG_HOST=http://config-service:8080
+      - EUREKA_HOST=http://discovery-service:8081
+      - AUTH-SERVICE_HOST=http://auth-service:8083
+      - TODO-SERVICE_HOST=http://todo-service:8084
+      - ACCOUNT-SERVICE_HOST=http://account-service:8085
+    depends_on:
+      - zipkin
+      - config-service
+      - discovery-service
+    command: ["java", "-jar", "auth-service.jar"]
+  todo-service:
+    build: ./todo-service
+    container_name: todo-service
+    networks:
+      - todo-forge-network
+    restart: always
+    working_dir: /app
+    #volumes:
+    #  - ./todo-service/target/todo-service.jar:/app/todo-service.jar
+    ports:
+      - 8084:8084
+    environment:
+      - DB_URL=jdbc:mysql://database:3306/todo
+      - DB_USERNAME=root
+      - DB_PASSWORD=dev
+      - ZIPKIN_HOST=http://zipkin:9411
+      - CONFIG_HOST=http://config-service:8080
+      - EUREKA_HOST=http://discovery-service:8081
+      - AUTH-SERVICE_HOST=http://auth-service:8083
+      - TODO-SERVICE_HOST=http://todo-service:8084
+      - ACCOUNT-SERVICE_HOST=http://account-service:8085
+    depends_on:
+      - database
+      - zipkin
+      - config-service
+      - discovery-service
+    command: ["java", "-jar", "todo-service.jar"]
+  account-service:
+    build: ./account-service
+    container_name: account-service
+    networks:
+      - todo-forge-network
+    restart: always
+    working_dir: /app
+    #volumes:
+    #  - ./account-service/target/account-service.jar:/app/account-service.jar
+    ports:
+      - 8085:8085
+    environment:
+      - DB_URL=jdbc:mysql://database:3306/account
+      - DB_USERNAME=root
+      - DB_PASSWORD=dev
+      - ZIPKIN_HOST=http://zipkin:9411
+      - CONFIG_HOST=http://config-service:8080
+      - EUREKA_HOST=http://discovery-service:8081
+      - AUTH-SERVICE_HOST=http://auth-service:8083
+      - TODO-SERVICE_HOST=http://todo-service:8084
+      - ACCOUNT-SERVICE_HOST=http://account-service:8085
+    depends_on:
+      - database
+      - zipkin
+      - config-service
+      - discovery-service
+    command: ["java", "-jar", "account-service.jar"]

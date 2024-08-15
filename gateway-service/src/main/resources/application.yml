@@ -2,7 +2,7 @@ spring:
   main:
     web-application-type: reactive # gateway doesn't support spring
   application.name: gateway-service
-  config.import: configserver:http://localhost:8080
+  config.import: configserver:${CONFIG_HOST:http://localhost:8080}
   cloud.config:
     fail-fast: true
     username: dev

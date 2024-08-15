@@ -1,6 +1,6 @@
 spring:
   application.name: discovery-service
-  config.import: configserver:http://localhost:8080
+  config.import: configserver:${CONFIG_HOST:http://localhost:8080}
   cloud.config:
     fail-fast: true
     username: dev

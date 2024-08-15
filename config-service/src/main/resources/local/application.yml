@@ -1,11 +1,11 @@
 eureka:
-  client.service-url.defaultZone: http://localhost:8081/eureka/ # must be defaultZone, not default-zone
+  client.service-url.defaultZone: ${EUREKA_HOST:http://localhost:8081}/eureka/ # must be defaultZone, not default-zone
   instance.prefer-ip-address: true
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
 spring:
-  zipkin.baseUrl: http://localhost:9411/
+  zipkin.baseUrl: ${ZIPKIN_HOST:http://localhost:9411}/
   sleuth:
     sampler:
       probability: 1.0
@@ -16,5 +16,18 @@ feign:
       default:
         read-timeout: 5000
         connect-timeout: 5000
+
+internal-services:
+  auth-service:
+    name: auth-service
+    url: ${AUTH-SERVICE_HOST:http://localhost:8083}
+  todo-service:
+    name: todo-service
+    url: ${TODO-SERVICE_HOST:http://localhost:8084}
+  account-service:
+    name: account-service
+    url: ${ACCOUNT-SERVICE_HOST:http://localhost:8085}
+
+
 oauth2:
-  access-token-uri: http://localhost:8083/oauth/token
+  access-token-uri: ${AUTH-SERVICE_HOST:http://localhost:8083}/oauth/token
