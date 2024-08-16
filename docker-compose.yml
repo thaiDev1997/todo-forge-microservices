@@ -13,7 +13,7 @@ services:
       - todo-forge-network
     restart: always
     ports:
-      - "3306:3306"
+      - 3306:3306
     volumes:
       - ./container_vol/database:/var/lib/mysql
     environment:
@@ -25,31 +25,31 @@ services:
       - todo-forge-network
     restart: always
     ports:
-      - "9411:9411"
+      - 9411:9411
   config-service:
     build: ./config-service
     container_name: config-service
     networks:
       - todo-forge-network
     restart: always
-    working_dir: /app
+    ports:
+      - 8080:8080
+    #working_dir: /app
     #volumes:
     #  - ./config-service/target/config-service.jar:/app/config-service.jar
-    ports:
-      - "8080:8080"
-    command: ["java", "-jar", "config-service.jar"]
+    #command: [ "java", "-jar", "config-service.jar" ]
   discovery-service:
     build: ./discovery-service
     container_name: discovery-service
     networks:
       - todo-forge-network
     restart: always
-    working_dir: /app
+    ports:
+      - 8081:8081
+    #working_dir: /app
     #volumes:
     #  - ./discovery-service/target/discovery-service.jar:/app/discovery-service.jar
-    ports:
-      - "8081:8081"
-    command: [ "java", "-jar", "discovery-service.jar" ]
+    #command: [ "java", "-jar", "discovery-service.jar" ]
     environment:
       - CONFIG_HOST=http://config-service:8080
     depends_on:
@@ -60,12 +60,12 @@ services:
     networks:
       - todo-forge-network
     restart: always
-    working_dir: /app
-    #volumes:
-    #  - ./gateway-service/target/gateway-service.jar:/app/gateway-service.jar
     ports:
       - 8082:8082
-    command: [ "java", "-jar", "gateway-service.jar" ]
+    #working_dir: /app
+    #volumes:
+    #  - ./gateway-service/target/gateway-service.jar:/app/gateway-service.jar
+    #command: [ "java", "-jar", "gateway-service.jar" ]
     environment:
       - CONFIG_HOST=http://config-service:8080
       - DISCOVERY_HOST=http://discovery-service:8081
@@ -77,32 +77,32 @@ services:
     networks:
       - todo-forge-network
     restart: always
-    working_dir: /app
-    #volumes:
-    #  - ./auth-service/target/auth-service.jar:/app/auth-service.jar
     ports:
       - 8083:8083
+    #working_dir: /app
+    #volumes:
+    #  - ./auth-service/target/auth-service.jar:/app/auth-service.jar
+    #command: ["java", "-jar", "auth-service.jar"]
     environment:
       - ZIPKIN_HOST=http://zipkin:9411
       - CONFIG_HOST=http://config-service:8080
       - DISCOVERY_HOST=http://discovery-service:8081
       - GATEWAY_HOST=http://gateway-service:8082
     depends_on:
-      - zipkin
       - config-service
       - discovery-service
-    command: ["java", "-jar", "auth-service.jar"]
   todo-service:
     build: ./todo-service
     container_name: todo-service
     networks:
       - todo-forge-network
     restart: always
-    working_dir: /app
-    #volumes:
-    #  - ./todo-service/target/todo-service.jar:/app/todo-service.jar
     ports:
       - 8084:8084
+    #working_dir: /app
+    #volumes:
+    #  - ./todo-service/target/todo-service.jar:/app/todo-service.jar
+    #command: ["java", "-jar", "todo-service.jar"]
     environment:
       - DB_URL=jdbc:mysql://database:3306/todo
       - DB_USERNAME=root
@@ -112,22 +112,21 @@ services:
       - DISCOVERY_HOST=http://discovery-service:8081
       - GATEWAY_HOST=http://gateway-service:8082
     depends_on:
-      - database
-      - zipkin
       - config-service
       - discovery-service
-    command: ["java", "-jar", "todo-service.jar"]
+      - database
   account-service:
     build: ./account-service
     container_name: account-service
     networks:
       - todo-forge-network
     restart: always
-    working_dir: /app
-    #volumes:
-    #  - ./account-service/target/account-service.jar:/app/account-service.jar
     ports:
       - 8085:8085
+    #working_dir: /app
+    #volumes:
+    #  - ./account-service/target/account-service.jar:/app/account-service.jar
+    #command: ["java", "-jar", "account-service.jar"]
     environment:
       - DB_URL=jdbc:mysql://database:3306/account
       - DB_USERNAME=root
@@ -137,8 +136,6 @@ services:
       - DISCOVERY_HOST=http://discovery-service:8081
       - GATEWAY_HOST=http://gateway-service:8082
     depends_on:
-      - database
-      - zipkin
       - config-service
       - discovery-service
-    command: ["java", "-jar", "account-service.jar"]
+      - database
