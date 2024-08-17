@@ -38,3 +38,15 @@ internal-services:
 
 oauth2:
   access-token-uri: ${GATEWAY_HOST:http://localhost:8082}/auth/oauth/token
+
+management:
+  endpoints:
+    metrics.enabled: true
+    prometheus.enabled: true
+    web:
+      exposure:
+        include: health, metrics, prometheus
+  metrics:
+    export:
+      prometheus.enabled: true
+    tags.application: ${spring.application.name}

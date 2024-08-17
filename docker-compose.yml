@@ -1,4 +1,4 @@
-# docker-compose --file docker-compose.yml up --build -d
+# docker-compose --file docker-compose.yml up --build --no-cache -d
 # docker-compose --file docker-compose.yml down
 
 networks:
@@ -26,6 +26,7 @@ services:
     restart: always
     ports:
       - 9411:9411
+  ## ELK -- start
   elasticsearch:
     image: "elasticsearch:7.17.23"
     container_name: elasticsearch
@@ -75,6 +76,39 @@ services:
     configs:
       - source: kibana_config
         target: /usr/share/kibana/config/kibana.yml
+  ## ELK -- end
+  ## Monitoring -- start
+  prometheus:
+    image: prom/prometheus:v2.53.2
+    container_name: prometheus
+    networks:
+      - todo-forge-network
+    restart: always
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    ports:
+      - 9090:9090
+    command:
+      - '--web.enable-lifecycle'
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    configs:
+      - source: prometheus_config
+        target: /etc/prometheus/prometheus.yml
+  grafana:
+    image: grafana/grafana:11.1.4
+    container_name: grafana
+    networks:
+      - todo-forge-network
+    ports:
+      - 3000:3000
+    configs:
+      - source: grafana_config
+        target: /etc/grafana/provisioning/datasources/datasources.yml
+    volumes:
+      - ./container_vol/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+    depends_on:
+      - prometheus
+  ## Monitoring -- end
   config-service:
     build: ./config-service
     container_name: config-service
@@ -141,6 +175,7 @@ services:
     depends_on:
       - config-service
       - discovery-service
+      - logstash
   todo-service:
     build: ./todo-service
     container_name: todo-service
@@ -166,6 +201,7 @@ services:
       - config-service
       - discovery-service
       - database
+      - logstash
   account-service:
     build: ./account-service
     container_name: account-service
@@ -191,6 +227,7 @@ services:
       - config-service
       - discovery-service
       - database
+      - logstash
 
 configs:
   elastic_config:
@@ -199,3 +236,7 @@ configs:
     file: ./container-config/logstash.conf
   kibana_config:
     file: ./container-config/kibana.yml
+  prometheus_config:
+    file: ./container-config/prometheus.yml
+  grafana_config:
+    file: ./container-config/grafana-datasources.yml
