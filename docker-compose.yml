@@ -26,6 +26,55 @@ services:
     restart: always
     ports:
       - 9411:9411
+  elasticsearch:
+    image: "elasticsearch:7.17.23"
+    container_name: elasticsearch
+    networks:
+      - todo-forge-network
+    restart: always
+    ports:
+      - 9200:9200
+    environment:
+      - discovery.type=single-node
+      - node.name=elasticsearch
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    configs:
+      - source: elastic_config
+        target: /usr/share/elasticsearch/config/elasticsearch.yml
+    volumes:
+      - ./container_vol/elasticsearch:/usr/share/elasticsearch/data
+  logstash:
+    image: "logstash:7.17.23"
+    container_name: logstash
+    networks:
+      - todo-forge-network
+    restart: always
+    ports:
+      - 5044:5044
+    depends_on:
+      - elasticsearch
+    links:
+      - elasticsearch
+    configs:
+      - source: logstash_config
+        target: /usr/share/logstash/pipeline/logstash.conf
+    volumes:
+      - ./container_vol/logstash/pipeline:/usr/share/logstash/pipeline
+  kibana:
+    image: "kibana:7.17.23"
+    container_name: kibana
+    networks:
+      - todo-forge-network
+    restart: always
+    ports:
+      - 5601:5601
+    depends_on:
+      - elasticsearch
+    links:
+      - elasticsearch
+    configs:
+      - source: kibana_config
+        target: /usr/share/kibana/config/kibana.yml
   config-service:
     build: ./config-service
     container_name: config-service
@@ -88,6 +137,7 @@ services:
       - CONFIG_HOST=http://config-service:8080
       - DISCOVERY_HOST=http://discovery-service:8081
       - GATEWAY_HOST=http://gateway-service:8082
+      - LOGSTASH_HOST=http://logstash:5044
     depends_on:
       - config-service
       - discovery-service
@@ -111,6 +161,7 @@ services:
       - CONFIG_HOST=http://config-service:8080
       - DISCOVERY_HOST=http://discovery-service:8081
       - GATEWAY_HOST=http://gateway-service:8082
+      - LOGSTASH_HOST=http://logstash:5044
     depends_on:
       - config-service
       - discovery-service
@@ -135,7 +186,16 @@ services:
       - CONFIG_HOST=http://config-service:8080
       - DISCOVERY_HOST=http://discovery-service:8081
       - GATEWAY_HOST=http://gateway-service:8082
+      - LOGSTASH_HOST=http://logstash:5044
     depends_on:
       - config-service
       - discovery-service
       - database
+
+configs:
+  elastic_config:
+    file: ./container-config/elasticsearch.yml
+  logstash_config:
+    file: ./container-config/logstash.conf
+  kibana_config:
+    file: ./container-config/kibana.yml
