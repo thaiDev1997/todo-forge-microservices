@@ -137,7 +137,7 @@ services:
       - CONFIG_HOST=http://config-service:8080
       - DISCOVERY_HOST=http://discovery-service:8081
       - GATEWAY_HOST=http://gateway-service:8082
-      - LOGSTASH_HOST=http://logstash:5044
+      - LOGSTASH_HOST=logstash:5044 # TCP -> not include http:// at prefix
     depends_on:
       - config-service
       - discovery-service
@@ -161,7 +161,7 @@ services:
       - CONFIG_HOST=http://config-service:8080
       - DISCOVERY_HOST=http://discovery-service:8081
       - GATEWAY_HOST=http://gateway-service:8082
-      - LOGSTASH_HOST=http://logstash:5044
+      - LOGSTASH_HOST=logstash:5044
     depends_on:
       - config-service
       - discovery-service
@@ -186,7 +186,7 @@ services:
       - CONFIG_HOST=http://config-service:8080
       - DISCOVERY_HOST=http://discovery-service:8081
       - GATEWAY_HOST=http://gateway-service:8082
-      - LOGSTASH_HOST=http://logstash:5044
+      - LOGSTASH_HOST=logstash:5044
     depends_on:
       - config-service
       - discovery-service

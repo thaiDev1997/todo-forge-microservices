@@ -7,8 +7,16 @@ springdoc:
 spring:
   zipkin.baseUrl: ${ZIPKIN_HOST:http://localhost:9411}/
   sleuth:
+    enabled: true
     sampler:
       probability: 1.0
+logging:
+  logstash:
+    server: ${LOGSTASH_HOST:localhost:5044}
+  level:
+    org.springframework.web: ERROR
+    org.hibernate: ERROR
+    com.example: INFO
 
 feign:
   client:
