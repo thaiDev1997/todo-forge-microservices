@@ -151,7 +151,7 @@ public class ResourceServiceImpl implements ResourceService {
 
     @Transactional
     @Override
-    public void savePermission(long resourceId, PermissionForm permission) {
+    public Long savePermission(long resourceId, PermissionForm permission) {
         ResourceEntity resource = resourceRepository.findById(resourceId)
                 .orElseThrow(() -> new BaseResponseException(HttpStatus.NOT_FOUND));
         PermissionEntity permissionEntity = modelMapper.map(permission, PermissionEntity.class);
@@ -159,6 +159,7 @@ public class ResourceServiceImpl implements ResourceService {
         if (!result) throw new BaseResponseException(HttpStatus.CONFLICT); // permission already saves
         permissionEntity.setActive(true);
         resourceRepository.save(resource);
+        return resource.getId();
     }
 
     @Transactional

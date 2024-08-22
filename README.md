@@ -70,7 +70,9 @@ TodoForge is a microservices-based todo application that demonstrates the implem
 ## Authorization
 **[oauthdebugger](https://oauthdebugger.com/)**
 <br />![image](https://github.com/user-attachments/assets/7e99a89d-b9da-4c4b-ab95-52d0c87eb3d4)
-
+- **Account**:
+    - **username**: admin
+    - **password**: test123
 
 ## Monitoring and Observability
 - **Tracing**: Distributed tracing is enabled via Zipkin. All requests are traced and you can view the trace logs in the Zipkin dashboard.

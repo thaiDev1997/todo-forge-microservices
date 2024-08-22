@@ -7,6 +7,7 @@ import lombok.experimental.FieldDefaults;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
+@Builder
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)

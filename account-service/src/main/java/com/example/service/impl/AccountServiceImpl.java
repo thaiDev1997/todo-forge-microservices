@@ -16,8 +16,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,6 +46,7 @@ public class AccountServiceImpl implements AccountService {
     @PersistenceContext
     EntityManager entityManager;
     ModelMapper modelMapper;
+    PasswordEncoder passwordEncoder;
 
     AccountRepository accountRepository;
     RoleRepository roleRepository;
@@ -106,18 +109,24 @@ public class AccountServiceImpl implements AccountService {
         AccountEntity accountEntity;
         long id = account.getId();
         String username = account.getUsername();
+        String rawPassword = account.getPassword();
         if (id == 0) {
             accountEntity = accountRepository.getActive(username);
             if (Objects.nonNull(accountEntity)) {
                 throw new BaseResponseException(HttpStatus.CONFLICT);
             }
             accountEntity = modelMapper.map(account, AccountEntity.class);
+            accountEntity.setPassword(passwordEncoder.encode(rawPassword));
             accountEntity.setStatus(AccountStatus.ACTIVE);
         } else {
             accountEntity = accountRepository.getActive(id, username);
             if (Objects.isNull(accountEntity)) {
                 throw new BaseResponseException(HttpStatus.NOT_FOUND);
             }
+            String encodedPassword = accountEntity.getPassword();
+            if (!passwordEncoder.matches(rawPassword, encodedPassword))
+                encodedPassword = passwordEncoder.encode(rawPassword);
+
             AccountDTO.ProfileDTO profile = account.getProfile();
             if (Objects.isNull(profile) && Objects.nonNull(accountEntity.getProfile())) {
                 // avoid assign "null" to AccountEntity.profile
@@ -126,8 +135,8 @@ public class AccountServiceImpl implements AccountService {
                 account.setProfile(profile);
             }
             modelMapper.map(account, accountEntity);
+            accountEntity.setPassword(encodedPassword);
         }
-        // TODO: BcryptPassword -> accountEntity.setPassword(account.getPassword());
         accountEntity = accountRepository.saveAndFlush(accountEntity);
         account.setId(accountEntity.getId());
         return account;

@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+@Builder
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -44,6 +45,7 @@ public class AccountDTO extends BaseEntityDTO {
         this.profile = profile;
     }
 
+    @Builder
     @Getter
     @Setter
     @FieldDefaults(level = AccessLevel.PRIVATE)

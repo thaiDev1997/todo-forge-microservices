@@ -10,6 +10,6 @@ public interface ResourceService {
     ResourceDTO getDetail(long id);
     ResourceDTO saveOrUpdate(ResourceDTO todo);
     void delete(long id);
-    void savePermission(long resourceId, PermissionForm permission);
+    Long savePermission(long resourceId, PermissionForm permission);
     void deletePermission(long resourceId, long permissionId);
 }
