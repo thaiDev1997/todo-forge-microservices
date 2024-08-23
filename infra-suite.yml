@@ -1,0 +1,123 @@
+# docker-compose --file docker-compose.yml up --build --no-cache -d
+# docker-compose --file docker-compose.yml down
+
+networks:
+  todo-forge-network:
+    driver: bridge
+
+services:
+  database:
+    image: "mysql:latest"
+    container_name: database
+    networks:
+      - todo-forge-network
+    restart: always
+    ports:
+      - 3306:3306
+    volumes:
+      - ./container_vol/database:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=dev
+  zipkin:
+    image: "openzipkin/zipkin:latest"
+    container_name: zipkin
+    networks:
+      - todo-forge-network
+    restart: always
+    ports:
+      - 9411:9411
+  ## ELK -- start
+  elasticsearch:
+    image: "elasticsearch:7.17.23"
+    container_name: elasticsearch
+    networks:
+      - todo-forge-network
+    restart: always
+    ports:
+      - 9200:9200
+    environment:
+      - discovery.type=single-node
+      - node.name=elasticsearch
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    configs:
+      - source: elastic_config
+        target: /usr/share/elasticsearch/config/elasticsearch.yml
+    volumes:
+      - ./container_vol/elasticsearch:/usr/share/elasticsearch/data
+  logstash:
+    image: "logstash:7.17.23"
+    container_name: logstash
+    networks:
+      - todo-forge-network
+    restart: always
+    ports:
+      - 5044:5044
+    depends_on:
+      - elasticsearch
+    links:
+      - elasticsearch
+    configs:
+      - source: logstash_config
+        target: /usr/share/logstash/pipeline/logstash.conf
+    volumes:
+      - ./container_vol/logstash/pipeline:/usr/share/logstash/pipeline
+  kibana:
+    image: "kibana:7.17.23"
+    container_name: kibana
+    networks:
+      - todo-forge-network
+    restart: always
+    ports:
+      - 5601:5601
+    depends_on:
+      - elasticsearch
+    links:
+      - elasticsearch
+    configs:
+      - source: kibana_config
+        target: /usr/share/kibana/config/kibana.yml
+  ## ELK -- end
+  ## Monitoring -- start
+  prometheus:
+    image: prom/prometheus:v2.53.2
+    container_name: prometheus
+    networks:
+      - todo-forge-network
+    restart: always
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    ports:
+      - 9090:9090
+    command:
+      - '--web.enable-lifecycle'
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    configs:
+      - source: prometheus_config
+        target: /etc/prometheus/prometheus.yml
+  grafana:
+    image: grafana/grafana:11.1.4
+    container_name: grafana
+    networks:
+      - todo-forge-network
+    ports:
+      - 3000:3000
+    configs:
+      - source: grafana_config
+        target: /etc/grafana/provisioning/datasources/datasources.yml
+    volumes:
+      - ./container_vol/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+    depends_on:
+      - prometheus
+  ## Monitoring -- end
+
+configs:
+  elastic_config:
+    file: ./container-config/elasticsearch.yml
+  logstash_config:
+    file: ./container-config/logstash.conf
+  kibana_config:
+    file: ./container-config/kibana.yml
+  prometheus_config:
+    file: ./container-config/prometheus.yml
+  grafana_config:
+    file: ./container-config/grafana-datasources.yml
