@@ -12,6 +12,12 @@
     <artifactId>resource-service</artifactId>
     <dependencies>
         <dependency>
+            <groupId>com.example</groupId>
+            <artifactId>core-service</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>

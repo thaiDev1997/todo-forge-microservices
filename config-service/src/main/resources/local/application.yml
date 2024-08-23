@@ -24,6 +24,9 @@ feign:
       default:
         read-timeout: 5000
         connect-timeout: 5000
+  circuitbreaker:
+    enabled: true
+hystrix.command.default.execution.isolation.strategy: SEMAPHORE # make SecurityContext, ThreadLocal are available in service calls
 
 internal-services:
   gateway-service:

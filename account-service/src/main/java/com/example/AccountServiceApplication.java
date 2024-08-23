@@ -6,7 +6,6 @@ import com.example.dto.AccountDTO;
 import com.example.dto.ResourceDTO;
 import com.example.dto.RoleDTO;
 import com.example.entity.AccountEntity;
-import com.example.entity.PermissionEntity;
 import com.example.entity.ResourceEntity;
 import com.example.entity.RoleEntity;
 import com.example.exception.BaseResponseException;
@@ -18,10 +17,10 @@ import com.example.service.AccountService;
 import com.example.service.ResourceService;
 import com.example.service.RoleService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
@@ -29,9 +28,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 @Slf4j
+@EnableCircuitBreaker
 @EnableJpaAuditing
 @EnableDiscoveryClient
 @SpringBootApplication

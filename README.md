@@ -25,6 +25,7 @@ TodoForge is a microservices-based todo application that demonstrates the implem
   - **Spring Cloud Gateway**: Provides a flexible routing mechanism.
   - **Spring Cloud Netflix Eureka**: Service registry and discovery.
   - **Spring Cloud Sleuth**: Distributed tracing.
+  - **Spring Cloud Hystrix**: handles latency and fault tolerance (Circuit Breaker pattern).
 - **Feign Client**: Simplifies inter-service communication.
 - **Zipkin**: Distributed tracing system to troubleshoot latency problems.
 - **ELK Stack**: For centralized logging (Elasticsearch, Logstash, Kibana).
