@@ -1,7 +1,7 @@
 package com.example.client;
 
 import feign.RequestInterceptor;
-import interceptor.OAuth2FeignRequestInterceptor;
+import com.example.interceptor.OAuth2FeignRequestInterceptor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.cloud.openfeign.FeignClient;

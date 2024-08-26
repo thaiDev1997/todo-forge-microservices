@@ -1,8 +1,10 @@
 package com.example.controller;
 
+import com.example.aspect.annotation.VerifyClientId;
 import com.example.dto.AccountDTO;
 import com.example.dto.AccountPermissionDTO;
 import com.example.service.AccountService;
+import com.example.service.SecurityService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -22,6 +24,7 @@ import java.util.List;
 public class AccountController {
 
     AccountService accountService;
+    SecurityService securityService;
 
     @GetMapping
     public List<AccountDTO> getAll() {
@@ -73,6 +76,7 @@ public class AccountController {
         accountService.deleteProfile(id, profileId);
     }
 
+    @VerifyClientId("${internal-services.account-service.name}") // only for "account-service" client
     @GetMapping(value = "/username/{username}")
     public AccountPermissionDTO getByUsername(@PathVariable(value = "username") @NotBlank String username) {
         return accountService.getByUsername(username);
