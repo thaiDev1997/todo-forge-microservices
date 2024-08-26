@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import java.util.Collections;
 import java.util.Map;
 
-@FeignClient(name = "auth-service-fallback", url = "${internal-services.gateway-service.url}",
-        path = "/auth/api/v1/auth", configuration = AuthServiceWithFallbackConfiguration.class,
+@FeignClient(name = "auth-service-fallback", url = "${internal-services.auth-service.url}",
+        path = "/api/v1/auth", configuration = AuthServiceWithFallbackConfiguration.class,
         // fallback = AuthServiceFallback.class,
         fallbackFactory = AuthServiceFallbackFactory.class)
 public interface AuthServiceWithFallback {

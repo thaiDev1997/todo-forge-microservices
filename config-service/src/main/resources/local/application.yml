@@ -26,21 +26,23 @@ feign:
         connect-timeout: 5000
   circuitbreaker:
     enabled: true
-hystrix.command.default.execution.isolation.strategy: SEMAPHORE # make SecurityContext, ThreadLocal are available in service calls
+hystrix.command.default.execution.isolation:
+  strategy: SEMAPHORE # make SecurityContext, ThreadLocal are available in service calls
+  thread.timeoutInMilliseconds: ${feign.client.config.default.read-timeout}
 
 internal-services:
-  gateway-service:
-    name: gateway-service
-    url: ${GATEWAY_HOST:http://localhost:8082}
   auth-service:
     name: auth-service
+    url: ${AUTH_HOST:http://localhost:8083}
   todo-service:
     name: todo-service
+    url: ${TODO_HOST:http://localhost:8084}
   account-service:
     name: account-service
+    url: ${ACCOUNT_HOST:http://localhost:8085}
 
 oauth2:
-  access-token-uri: ${GATEWAY_HOST:http://localhost:8082}/auth/oauth/token
+  access-token-uri: ${AUTH_HOST:http://localhost:8083}/oauth/token
 
 management:
   endpoints:
