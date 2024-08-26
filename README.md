@@ -50,23 +50,24 @@ TodoForge is a microservices-based todo application that demonstrates the implem
 ## Getting Started
 
 1. Clone the repository:
-
    ```bash
    git clone https://github.com/thaiDev1997/todo-forge-microservices.git
+2. Change directory:
+   ```bash
    cd todo-forge-microservices
-2. Build the project:
+3. Build the project:
    ```bash
    mvn clean install
-3. Start the services using Docker Compose
+4. Start the services using Docker Compose
    ```bash
    docker-compose --file docker-compose.yml up --build
-4. Access the services
+5. Access the services
  <br />**API Gateway**: http://localhost:8082
  <br />**Authorization**: http://localhost:8083
  <br />**Zipkin Dashboard**: http://localhost:9411
  <br />**Kibana Dashboard**: http://localhost:5601
  <br />**Prometheus**: http://localhost:9090
- <br />**Grafana**: http://localhost:3000
+ <br />**Grafana**: http://localhost:3000 (username: admin - password: admin)
 
 ## Authorization
 **[oauthdebugger](https://oauthdebugger.com/)**
