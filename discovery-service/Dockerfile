@@ -1,4 +1,4 @@
-FROM openjdk:11
+FROM openjdk:11-jre-slim
 WORKDIR /app
 COPY ./target/discovery-service.jar /app
 EXPOSE 8081
