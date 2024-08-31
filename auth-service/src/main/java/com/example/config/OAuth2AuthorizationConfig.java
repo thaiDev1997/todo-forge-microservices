@@ -7,6 +7,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -98,11 +99,13 @@ public class OAuth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
                 .allowFormAuthenticationForClients();
     }
 
+    @Primary // use auth-service's bean rather than resource-service
     @Bean
     public TokenStore tokenStore() {
         return new JwtTokenStore(accessTokenConverter());
     }
 
+    @Primary // use auth-service's bean rather than resource-service
     @Bean
     public JwtAccessTokenConverter accessTokenConverter() {
         ClassPathResource classPathResource = new ClassPathResource(keyStorePath);
