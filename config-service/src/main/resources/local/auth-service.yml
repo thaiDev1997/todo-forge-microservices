@@ -6,7 +6,7 @@ oauth2:
     password: todo-forge-123456
     alias: todo-forge
   client:
-    access-token-validity: 600
+    access-token-validity: 1200
     refresh-token-validity: 2592000
     clients:
       todo-forge:
@@ -47,3 +47,22 @@ oauth2:
     todo-service:
       client-id: todo-service
       client-secret: 123
+
+spring:
+  kafka:
+    producer:
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      # acks: acknowledges about persisting event
+      # 0: no wait for kafka response
+      # 1: leader (master) write success, not wait for follower (slaves)
+      # -1: wait for all leader(master) , and replication (slaves)
+      acks: -1
+      # number of retry times
+      retries: 1
+      properties:
+        # persisting response exceeds
+        # timeout 1000ms -> trigger retry
+        request.timeout.ms: 1000
+        # prevent duplicate send for retryable processing
+        enable.idempotence: true
+        max.in.flight.requests.per.connection: 5

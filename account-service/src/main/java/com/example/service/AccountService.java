@@ -2,6 +2,7 @@ package com.example.service;
 
 import com.example.dto.AccountDTO;
 import com.example.dto.AccountPermissionDTO;
+import com.example.dto.LastLoginDTO;
 
 import java.util.List;
 
@@ -15,4 +16,5 @@ public interface AccountService {
     void deleteAllRoles(long id);
     void deleteProfile(long id, long profileId);
     AccountPermissionDTO getByUsername(String username);
+    void updateLastLogin(LastLoginDTO lastLogin);
 }

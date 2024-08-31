@@ -7,11 +7,11 @@ networks:
 
 services:
   database:
-    image: "mysql:latest"
+    image: mysql:latest
     container_name: database
     networks:
       - todo-forge-network
-    restart: always
+    restart: on-failure
     ports:
       - 3306:3306
     volumes:
@@ -19,20 +19,20 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=dev
   zipkin:
-    image: "openzipkin/zipkin:latest"
+    image: openzipkin/zipkin:latest
     container_name: zipkin
     networks:
       - todo-forge-network
-    restart: always
+    restart: on-failure
     ports:
       - 9411:9411
   ## ELK -- start
   elasticsearch:
-    image: "elasticsearch:7.17.23"
+    image: elasticsearch:7.17.23
     container_name: elasticsearch
     networks:
       - todo-forge-network
-    restart: always
+    restart: on-failure
     ports:
       - 9200:9200
     environment:
@@ -45,11 +45,11 @@ services:
     volumes:
       - ./container_vol/elasticsearch:/usr/share/elasticsearch/data
   logstash:
-    image: "logstash:7.17.23"
+    image: logstash:7.17.23
     container_name: logstash
     networks:
       - todo-forge-network
-    restart: always
+    restart: on-failure
     ports:
       - 5044:5044
     depends_on:
@@ -62,11 +62,11 @@ services:
     volumes:
       - ./container_vol/logstash/pipeline:/usr/share/logstash/pipeline
   kibana:
-    image: "kibana:7.17.23"
+    image: kibana:7.17.23
     container_name: kibana
     networks:
       - todo-forge-network
-    restart: always
+    restart: on-failure
     ports:
       - 5601:5601
     depends_on:
@@ -83,7 +83,7 @@ services:
     container_name: prometheus
     networks:
       - todo-forge-network
-    restart: always
+    restart: on-failure
     extra_hosts:
       - host.docker.internal:host-gateway
     ports:
@@ -109,6 +109,74 @@ services:
     depends_on:
       - prometheus
   ## Monitoring -- end
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.3.2
+    container_name: zookeeper
+    networks:
+      - todo-forge-network
+    restart: on-failure
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_SERVER_ID: 1
+    ports:
+      - 2181:2181
+  kafka-1:
+    image: confluentinc/cp-kafka:7.3.2
+    container_name: kafka-1
+    networks:
+      - todo-forge-network
+    restart: on-failure
+    ports:
+      - 9092:9092
+      - 29092:29092
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 2
+      KAFKA_LOG_RETENTION_HOURS: 168
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: false
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-1:29092,EXTERNAL://localhost:9092
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:29092,EXTERNAL://0.0.0.0:9092
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+    depends_on:
+      - zookeeper
+  kafka-2:
+    image: confluentinc/cp-kafka:7.3.2
+    container_name: kafka-2
+    networks:
+      - todo-forge-network
+    restart: on-failure
+    ports:
+      - 9093:9093
+      - 29093:29093
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 2
+      KAFKA_LOG_RETENTION_HOURS: 168
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: false
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-2:29093,EXTERNAL://localhost:9093
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:29093,EXTERNAL://0.0.0.0:9093
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+    depends_on:
+      - zookeeper
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
+    networks:
+      - todo-forge-network
+    restart: on-failure
+    ports:
+      - 9080:8080
+    environment:
+      KAFKA_CLUSTERS_0_NAME: kafka-cluster
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka-1:29092,kafka-2:29093
+      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
+    depends_on:
+      - kafka-1
+      - kafka-2
 
 configs:
   elastic_config:

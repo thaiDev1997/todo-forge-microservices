@@ -13,6 +13,7 @@ TodoForge is a microservices-based todo application that demonstrates the implem
 - **Tracing**: Distributed tracing with Zipkin and Spring Cloud Sleuth.
 - **Monitoring**: Prometheus and Grafana for metrics collection and visualization.
 - **Centralized Logging**: ELK (Elasticsearch, Logstash, and Kibana) stack for centralized logging and analytics.
+- **Event Driven**: Apache Kafka.
 
 ## Technology Stack
 
@@ -20,6 +21,7 @@ TodoForge is a microservices-based todo application that demonstrates the implem
 - **Spring Boot**: Simplifies the development of microservices.
 - **Spring Data JPA**: Provides a way to persist data.
 - **Spring Security OAuth2**: Manages authentication and authorization.
+- **Spring Kafka**: Produce & consume the topics through Kafka cluster.
 - **Spring Cloud**: 
   - **Spring Cloud Config**: Centralized external configuration management.
   - **Spring Cloud Gateway**: Provides a flexible routing mechanism.
@@ -68,6 +70,7 @@ TodoForge is a microservices-based todo application that demonstrates the implem
  <br />**Kibana Dashboard**: http://localhost:5601
  <br />**Prometheus**: http://localhost:9090
  <br />**Grafana**: http://localhost:3000 (username: admin - password: admin)
+ <br />**Kafka UI**: http://localhost:9080
 
 ## Authorization
 **[oauthdebugger](https://oauthdebugger.com/)**

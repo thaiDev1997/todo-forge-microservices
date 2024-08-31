@@ -24,6 +24,11 @@ spring:
         format_sql: 'true'
     hibernate:
       ddl-auto: update
+  kafka:
+    consumer:
+      value-deserializer: org.apache.kafka.common.serialization.ByteArrayDeserializer
+      auto-offset-reset: earliest
+
 oauth2:
   internal-client-credentials:
     todo-service:

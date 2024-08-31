@@ -3,6 +3,7 @@ package com.example.service.impl;
 import com.example.constant.AccountStatus;
 import com.example.dto.AccountDTO;
 import com.example.dto.AccountPermissionDTO;
+import com.example.dto.LastLoginDTO;
 import com.example.entity.AccountEntity;
 import com.example.entity.ProfileEntity;
 import com.example.entity.RoleEntity;
@@ -232,6 +233,12 @@ public class AccountServiceImpl implements AccountService {
                 .collect(Collectors.toList());
         List<ResourcePermission> resourcePermissions = this.getResourcePermissions(accountId, roleIds);
         return new AccountPermissionDTO(account, resourcePermissions);
+    }
+
+    @Transactional
+    @Override
+    public void updateLastLogin(LastLoginDTO lastLogin) {
+        accountRepository.updateLastLogin(lastLogin.getUsername(), lastLogin.getLocalDateTime());
     }
 
     private List<ResourcePermission> getResourcePermissions(long accountId, List<Long> roleIds) {

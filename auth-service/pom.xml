@@ -50,6 +50,10 @@
             <version>2.3.1</version>
         </dependency>
         <!-- @@JAVA 11: JAXB completely removed #END -->
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
 
     </dependencies>
 

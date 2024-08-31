@@ -5,6 +5,7 @@ import com.example.dto.AccountDTO;
 import com.example.dto.AccountPermissionDTO;
 import com.example.dto.TodoUser;
 import com.example.exception.BaseResponseException;
+import com.netflix.hystrix.exception.HystrixRuntimeException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -36,7 +37,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             if (Objects.isNull(accountPermission)) {
                 throw new UsernameNotFoundException(String.format("%s not found", username));
             }
-        } catch (BaseResponseException baseResponseException) {
+        } catch (BaseResponseException | HystrixRuntimeException baseResponseException) {
             throw new UsernameNotFoundException(String.format("%s not found", username));
         }
         AccountRoleDTO accountRole = accountPermission.getAccount();
