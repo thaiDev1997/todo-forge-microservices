@@ -1,6 +1,6 @@
-package com.example.entity;
+package com.todoforge.todo.entity;
 
-import com.example.constant.TodoStatus;
+import com.todoforge.todo.constant.TodoStatus;
 import lombok.Getter;
 import lombok.Setter;
 

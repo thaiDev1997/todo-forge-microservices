@@ -1,10 +1,10 @@
-package com.example.service.impl;
+package com.todoforge.todo.service.impl;
 
-import com.example.dto.TodoDTO;
-import com.example.entity.TodoEntity;
+import com.todoforge.todo.dto.TodoDTO;
+import com.todoforge.todo.entity.TodoEntity;
 import com.todoforge.core.exception.BaseResponseException;
-import com.example.repository.TodoRepository;
-import com.example.service.TodoService;
+import com.todoforge.todo.repository.TodoRepository;
+import com.todoforge.todo.service.TodoService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

@@ -1,6 +1,6 @@
-package com.example.service;
+package com.todoforge.todo.service;
 
-import com.example.dto.TodoDTO;
+import com.todoforge.todo.dto.TodoDTO;
 
 import java.util.List;
 

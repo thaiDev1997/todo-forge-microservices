@@ -1,4 +1,4 @@
-package com.example.client;
+package com.todoforge.todo.client;
 
 import com.todoforge.core.dto.InternalClientCredentials;
 import feign.RequestInterceptor;

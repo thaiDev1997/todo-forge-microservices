@@ -1,4 +1,4 @@
-package com.example.constant;
+package com.todoforge.todo.constant;
 
 public enum TodoStatus {
     PENDING,

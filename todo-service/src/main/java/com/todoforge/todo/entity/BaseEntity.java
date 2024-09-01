@@ -1,4 +1,4 @@
-package com.example.entity;
+package com.todoforge.todo.entity;
 
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;

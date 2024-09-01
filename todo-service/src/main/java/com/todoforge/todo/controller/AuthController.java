@@ -1,7 +1,7 @@
-package com.example.controller;
+package com.todoforge.todo.controller;
 
-import com.example.client.AuthService;
-import com.example.client.AuthServiceWithFallback;
+import com.todoforge.todo.client.AuthService;
+import com.todoforge.todo.client.AuthServiceWithFallback;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

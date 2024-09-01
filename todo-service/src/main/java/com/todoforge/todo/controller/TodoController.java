@@ -1,7 +1,7 @@
-package com.example.controller;
+package com.todoforge.todo.controller;
 
-import com.example.dto.TodoDTO;
-import com.example.service.TodoService;
+import com.todoforge.todo.dto.TodoDTO;
+import com.todoforge.todo.service.TodoService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

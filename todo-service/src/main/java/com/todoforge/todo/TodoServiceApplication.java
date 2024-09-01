@@ -1,24 +1,32 @@
-package com.example;
+package com.todoforge.todo;
 
-import com.example.constant.TodoStatus;
-import com.example.dto.TodoDTO;
-import com.example.entity.TodoEntity;
-import com.example.repository.TodoRepository;
-import com.example.service.TodoService;
+import com.todoforge.todo.constant.TodoStatus;
+import com.todoforge.todo.dto.TodoDTO;
+import com.todoforge.todo.entity.TodoEntity;
+import com.todoforge.todo.repository.TodoRepository;
+import com.todoforge.todo.service.TodoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
+@EnableDiscoveryClient
+@EnableFeignClients
 @Slf4j
 @EnableCircuitBreaker
 @EnableJpaAuditing
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {
+        "com.todoforge.core",
+        "com.todoforge.resource",
+        "com.todoforge.todo"
+})
 public class TodoServiceApplication {
     public static void main(String[] args) {
         SpringApplication.run(TodoServiceApplication.class, args);

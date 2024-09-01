@@ -1,4 +1,4 @@
-package com.example.client;
+package com.todoforge.todo.client;
 
 import feign.RequestInterceptor;
 import com.todoforge.resource.interceptor.OAuth2FeignRequestInterceptor;

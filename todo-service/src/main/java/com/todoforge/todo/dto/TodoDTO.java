@@ -1,6 +1,6 @@
-package com.example.dto;
+package com.todoforge.todo.dto;
 
-import com.example.constant.TodoStatus;
+import com.todoforge.todo.constant.TodoStatus;
 import com.todoforge.core.dto.BaseEntityDTO;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
