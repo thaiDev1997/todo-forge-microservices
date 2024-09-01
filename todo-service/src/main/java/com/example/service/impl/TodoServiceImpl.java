@@ -2,7 +2,7 @@ package com.example.service.impl;
 
 import com.example.dto.TodoDTO;
 import com.example.entity.TodoEntity;
-import com.example.exception.BaseResponseException;
+import com.todoforge.core.exception.BaseResponseException;
 import com.example.repository.TodoRepository;
 import com.example.service.TodoService;
 import lombok.AccessLevel;

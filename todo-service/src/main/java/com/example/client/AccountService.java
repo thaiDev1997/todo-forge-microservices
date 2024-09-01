@@ -1,6 +1,6 @@
 package com.example.client;
 
-import com.example.dto.InternalClientCredentials;
+import com.todoforge.core.dto.InternalClientCredentials;
 import feign.RequestInterceptor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;

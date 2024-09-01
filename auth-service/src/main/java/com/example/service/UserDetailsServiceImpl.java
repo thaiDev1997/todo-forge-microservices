@@ -1,16 +1,14 @@
 package com.example.service;
 
 import com.example.client.AccountService;
-import com.example.dto.AccountDTO;
 import com.example.dto.AccountPermissionDTO;
 import com.example.dto.TodoUser;
-import com.example.exception.BaseResponseException;
+import com.todoforge.core.exception.BaseResponseException;
 import com.netflix.hystrix.exception.HystrixRuntimeException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

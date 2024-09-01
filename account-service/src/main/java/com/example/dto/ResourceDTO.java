@@ -1,5 +1,6 @@
 package com.example.dto;
 
+import com.todoforge.core.dto.BaseEntityDTO;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import lombok.experimental.FieldDefaults;

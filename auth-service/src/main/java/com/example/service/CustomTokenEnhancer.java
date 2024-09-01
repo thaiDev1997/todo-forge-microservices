@@ -1,9 +1,10 @@
 package com.example.service;
 
-import com.example.dto.AccountPayload;
+import com.todoforge.core.service.RedisService;
+import com.todoforge.resource.dto.AccountPayload;
 import com.example.dto.AccountPermissionDTO;
 import com.example.dto.TodoUser;
-import com.example.dto.UserSessionData;
+import com.todoforge.core.dto.UserSessionData;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

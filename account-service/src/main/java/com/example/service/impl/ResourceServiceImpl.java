@@ -3,7 +3,7 @@ package com.example.service.impl;
 import com.example.dto.ResourceDTO;
 import com.example.entity.PermissionEntity;
 import com.example.entity.ResourceEntity;
-import com.example.exception.BaseResponseException;
+import com.todoforge.core.exception.BaseResponseException;
 import com.example.form.PermissionForm;
 import com.example.repository.PermissionRepository;
 import com.example.repository.ResourceRepository;

@@ -3,7 +3,7 @@ package com.example.service.impl;
 import com.example.dto.RoleDTO;
 import com.example.entity.PermissionEntity;
 import com.example.entity.RoleEntity;
-import com.example.exception.BaseResponseException;
+import com.todoforge.core.exception.BaseResponseException;
 import com.example.repository.PermissionRepository;
 import com.example.repository.RoleRepository;
 import com.example.service.RoleService;

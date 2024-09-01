@@ -1,6 +1,7 @@
 package com.example.dto;
 
 import com.example.constant.AccountStatus;
+import com.todoforge.core.dto.BaseEntityDTO;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 

@@ -8,7 +8,7 @@ import com.example.dto.RoleDTO;
 import com.example.entity.AccountEntity;
 import com.example.entity.ResourceEntity;
 import com.example.entity.RoleEntity;
-import com.example.exception.BaseResponseException;
+import com.todoforge.core.exception.BaseResponseException;
 import com.example.form.PermissionForm;
 import com.example.repository.AccountRepository;
 import com.example.repository.ResourceRepository;

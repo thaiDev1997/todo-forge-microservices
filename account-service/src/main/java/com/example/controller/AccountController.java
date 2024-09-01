@@ -1,10 +1,10 @@
 package com.example.controller;
 
-import com.example.aspect.annotation.VerifyClientId;
+import com.todoforge.resource.aspect.annotation.VerifyClientId;
 import com.example.dto.AccountDTO;
 import com.example.dto.AccountPermissionDTO;
 import com.example.service.AccountService;
-import com.example.service.SecurityService;
+import com.todoforge.resource.service.SecurityService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

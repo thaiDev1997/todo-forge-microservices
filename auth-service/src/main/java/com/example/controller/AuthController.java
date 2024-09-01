@@ -1,23 +1,17 @@
 package com.example.controller;
 
-import com.example.dto.AccountPayload;
-import com.example.dto.UserSessionData;
-import com.example.exception.BaseResponseException;
-import com.example.service.RedisService;
-import com.example.service.SecurityService;
+import com.todoforge.core.service.RedisService;
+import com.todoforge.resource.service.SecurityService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
-import java.util.Map;
 import java.util.Objects;
 
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
