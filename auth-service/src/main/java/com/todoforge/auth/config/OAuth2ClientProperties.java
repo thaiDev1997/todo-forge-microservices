@@ -1,4 +1,4 @@
-package com.example.config;
+package com.todoforge.auth.config;
 
 import lombok.AccessLevel;
 import lombok.Getter;

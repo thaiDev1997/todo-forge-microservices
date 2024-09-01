@@ -1,9 +1,9 @@
-package com.example.service;
+package com.todoforge.auth.service;
 
 import com.todoforge.core.service.RedisService;
 import com.todoforge.resource.dto.AccountPayload;
-import com.example.dto.AccountPermissionDTO;
-import com.example.dto.TodoUser;
+import com.todoforge.auth.dto.AccountPermissionDTO;
+import com.todoforge.auth.dto.TodoUser;
 import com.todoforge.core.dto.UserSessionData;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

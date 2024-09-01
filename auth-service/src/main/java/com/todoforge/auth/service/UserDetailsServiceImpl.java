@@ -1,8 +1,8 @@
-package com.example.service;
+package com.todoforge.auth.service;
 
-import com.example.client.AccountService;
-import com.example.dto.AccountPermissionDTO;
-import com.example.dto.TodoUser;
+import com.todoforge.auth.client.AccountService;
+import com.todoforge.auth.dto.AccountPermissionDTO;
+import com.todoforge.auth.dto.TodoUser;
 import com.todoforge.core.exception.BaseResponseException;
 import com.netflix.hystrix.exception.HystrixRuntimeException;
 import lombok.AccessLevel;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.example.dto.AccountPermissionDTO.*;
+import static com.todoforge.auth.dto.AccountPermissionDTO.*;
 
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor

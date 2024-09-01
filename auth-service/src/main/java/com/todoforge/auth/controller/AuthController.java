@@ -1,4 +1,4 @@
-package com.example.controller;
+package com.todoforge.auth.controller;
 
 import com.todoforge.core.service.RedisService;
 import com.todoforge.resource.service.SecurityService;

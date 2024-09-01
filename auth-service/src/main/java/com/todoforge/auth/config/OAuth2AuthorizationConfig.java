@@ -1,7 +1,7 @@
-package com.example.config;
+package com.todoforge.auth.config;
 
 import com.todoforge.resource.config.CustomAccessTokenConverter;
-import com.example.service.CustomTokenEnhancer;
+import com.todoforge.auth.service.CustomTokenEnhancer;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

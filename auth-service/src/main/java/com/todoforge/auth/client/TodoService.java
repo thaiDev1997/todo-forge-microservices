@@ -1,6 +1,5 @@
-package com.example.client;
+package com.todoforge.auth.client;
 
-import com.example.dto.AccountPermissionDTO;
 import com.todoforge.core.dto.InternalClientCredentials;
 import feign.RequestInterceptor;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,14 +11,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
 import org.springframework.security.oauth2.client.token.grant.client.ClientCredentialsResourceDetails;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name = "${internal-services.account-service.name}", url = "${internal-services.account-service.url}",
-        path = "/api/v1", configuration = AccountFeignClientConfiguration.class)
-public interface AccountService {
-
-    @GetMapping(value = "/accounts/username/{username}")
-    AccountPermissionDTO getByUsername(@PathVariable(value = "username") String username);
+@FeignClient(name = "${internal-services.todo-service.name}", url = "${internal-services.todo-service.url}",
+        path = "/api/v1", configuration = TodoFeignClientConfiguration.class)
+public interface TodoService {
 
     @GetMapping(value = "/app/name")
     String getName();
@@ -27,10 +22,10 @@ public interface AccountService {
 
 @SuppressWarnings("deprecation")
 @EnableConfigurationProperties
-class AccountFeignClientConfiguration {
+class TodoFeignClientConfiguration {
 
     @Bean
-    @ConfigurationProperties(prefix = "oauth2.internal-client-credentials.account-service")
+    @ConfigurationProperties(prefix = "oauth2.internal-client-credentials.todo-service")
     public InternalClientCredentials internalClientCredentials() {
         return new InternalClientCredentials();
     }

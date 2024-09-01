@@ -1,4 +1,4 @@
-package com.example.constant;
+package com.todoforge.auth.constant;
 
 public enum AccountStatus {
     PENDING, // not verified yet

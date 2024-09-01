@@ -1,6 +1,6 @@
-package com.example.dto;
+package com.todoforge.auth.dto;
 
-import com.example.constant.AccountStatus;
+import com.todoforge.auth.constant.AccountStatus;
 import com.todoforge.core.dto.BaseEntityDTO;
 import lombok.AccessLevel;
 import lombok.Getter;

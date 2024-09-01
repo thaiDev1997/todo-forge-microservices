@@ -1,4 +1,4 @@
-package com.example.config;
+package com.todoforge.auth.config;
 
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.AdminClientConfig;

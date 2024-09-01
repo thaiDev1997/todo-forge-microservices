@@ -1,4 +1,4 @@
-package com.example.dto;
+package com.todoforge.auth.dto;
 
 import lombok.AccessLevel;
 import lombok.Getter;

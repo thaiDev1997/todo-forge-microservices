@@ -1,4 +1,4 @@
-package com.example.config;
+package com.todoforge.auth.config;
 
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;

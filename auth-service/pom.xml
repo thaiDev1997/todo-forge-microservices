@@ -10,7 +10,10 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
+    <groupId>com.todoforge.core</groupId>
     <artifactId>auth-service</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+
     <dependencies>
         <dependency>
             <groupId>com.todoforge.resource</groupId>
