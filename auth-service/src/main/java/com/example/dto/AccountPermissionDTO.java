@@ -6,13 +6,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
+import java.io.Serializable;
 import java.util.List;
 
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class AccountPermissionDTO {
+public class AccountPermissionDTO implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     AccountRoleDTO account;
     List<ResourcePermission> permissions;
 
@@ -20,6 +23,8 @@ public class AccountPermissionDTO {
     @Setter
     @Getter
     public static class AccountRoleDTO extends AccountDTO {
+        private static final long serialVersionUID = 1L;
+
         List<String> roles;
     }
 
@@ -27,7 +32,9 @@ public class AccountPermissionDTO {
     @Getter
     @Setter
     @RequiredArgsConstructor
-    public static class ResourcePermission {
+    public static class ResourcePermission implements Serializable {
+        private static final long serialVersionUID = 1L;
+
         String resourceCode;
         String scope;
     }

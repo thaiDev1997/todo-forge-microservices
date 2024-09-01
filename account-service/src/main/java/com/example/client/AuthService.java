@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @FeignClient(name = "${internal-services.auth-service.name}", url = "${internal-services.auth-service.url}",
-        path = "/api/v1/auth",  configuration = AuthServiceConfiguration.class)
+        path = "/oauth",  configuration = AuthServiceConfiguration.class)
 public interface AuthService {
 
     @GetMapping("/greeting")

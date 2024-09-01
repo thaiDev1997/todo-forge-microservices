@@ -255,6 +255,8 @@ services:
       - ACCOUNT_HOST=http://account-service:8085
       - LOGSTASH_HOST=logstash:5044 # TCP -> not include http:// at prefix
       - KAFKA_BOOTSTRAP_SERVERS=kafka-1:29092,kafka-2:29093
+      - REDIS_HOST=redis-stack
+      - REDIS_PORT=6379
     depends_on:
       - config-service
       - discovery-service
@@ -283,6 +285,8 @@ services:
       - ACCOUNT_HOST=http://account-service:8085
       - LOGSTASH_HOST=logstash:5044
       - KAFKA_BOOTSTRAP_SERVERS=kafka-1:29092,kafka-2:29093
+      - REDIS_HOST=redis-stack
+      - REDIS_PORT=6379
     depends_on:
       - config-service
       - discovery-service
@@ -312,6 +316,8 @@ services:
       - ACCOUNT_HOST=http://account-service:8085
       - LOGSTASH_HOST=logstash:5044
       - KAFKA_BOOTSTRAP_SERVERS=kafka-1:29092,kafka-2:29093
+      - REDIS_HOST=redis-stack
+      - REDIS_PORT=6379
     depends_on:
       - config-service
       - discovery-service

@@ -42,7 +42,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
         AccountRoleDTO accountRole = accountPermission.getAccount();
         List<GrantedAuthority> authorities = this.buildGrantedAuthority(accountRole.getRoles(), accountPermission.getPermissions());
-        return new TodoUser(username, accountRole.getPassword(), authorities, accountRole);
+        return new TodoUser(username, accountRole.getPassword(), authorities, accountPermission);
     }
 
     private List<GrantedAuthority> buildGrantedAuthority(List<String> roles, List<ResourcePermission> permissions) {

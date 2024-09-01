@@ -22,6 +22,7 @@ TodoForge is a microservices-based todo application that demonstrates the implem
 - **Spring Data JPA**: Provides a way to persist data.
 - **Spring Security OAuth2**: Manages authentication and authorization.
 - **Spring Kafka**: Produce & consume the topics through Kafka cluster.
+- **Spring Redis**: Store data (user sessions, caching data, authorization_code grant type's authorization code...) in-memory.
 - **Spring Cloud**: 
   - **Spring Cloud Config**: Centralized external configuration management.
   - **Spring Cloud Gateway**: Provides a flexible routing mechanism.
@@ -71,6 +72,7 @@ TodoForge is a microservices-based todo application that demonstrates the implem
  <br />**Prometheus**: http://localhost:9090
  <br />**Grafana**: http://localhost:3000 (username: admin - password: admin)
  <br />**Kafka UI**: http://localhost:9080
+ <br />**Redis Insight (UI)**: http://localhost:8001
 
 ## Authorization
 **[oauthdebugger](https://oauthdebugger.com/)**

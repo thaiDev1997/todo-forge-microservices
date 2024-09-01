@@ -14,12 +14,15 @@ public class TodoUser extends User {
     String firstName;
     String lastName;
     String emailAddress;
+    AccountPermissionDTO accountPermission;
 
-    public TodoUser(String username, String password, Collection<? extends GrantedAuthority> authorities, AccountDTO account) {
+    public TodoUser(String username, String password, Collection<? extends GrantedAuthority> authorities, AccountPermissionDTO accountPermission) {
         super(username, password, authorities);
-        AccountDTO.ProfileDTO profile = account.getProfile();
+
+        AccountDTO.ProfileDTO profile = accountPermission.getAccount().getProfile();
         this.firstName = profile.getFirstName();
         this.lastName = profile.getLastName();
         this.emailAddress = profile.getEmailAddress();
+        this.accountPermission = accountPermission;
     }
 }

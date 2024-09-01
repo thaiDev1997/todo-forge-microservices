@@ -10,7 +10,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,7 +18,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @Slf4j
 @EnableCircuitBreaker
 @EnableJpaAuditing
-@EnableDiscoveryClient
 @SpringBootApplication
 public class TodoServiceApplication {
     public static void main(String[] args) {

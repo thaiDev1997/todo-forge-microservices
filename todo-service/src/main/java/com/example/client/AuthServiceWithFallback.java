@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.Map;
 
 @FeignClient(name = "auth-service-fallback", url = "${internal-services.auth-service.url}",
-        path = "/api/v1/auth", configuration = AuthServiceWithFallbackConfiguration.class,
+        path = "/oauth", configuration = AuthServiceWithFallbackConfiguration.class,
         // fallback = AuthServiceFallback.class,
         fallbackFactory = AuthServiceFallbackFactory.class)
 public interface AuthServiceWithFallback {

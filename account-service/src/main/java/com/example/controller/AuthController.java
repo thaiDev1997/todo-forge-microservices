@@ -15,7 +15,7 @@ import java.util.Map;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(value = "/api/v1/auth")
+@RequestMapping(value = "/oauth")
 public class AuthController {
 
     AuthServiceWithFallback authServiceWithFallback;

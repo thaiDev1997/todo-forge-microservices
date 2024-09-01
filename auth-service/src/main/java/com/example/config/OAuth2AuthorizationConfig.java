@@ -1,5 +1,6 @@
 package com.example.config;
 
+import com.example.service.CustomTokenEnhancer;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -21,11 +22,13 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.code.InMemoryAuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.code.RedisAuthorizationCodeServices;
+import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
 
+import java.util.Arrays;
 import java.util.Map;
 
 @SuppressWarnings("deprecation")
@@ -39,6 +42,8 @@ public class OAuth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
     final UserDetailsService userDetailsService;
     final AuthenticationManager authenticationManager;
     final OAuth2ClientProperties oAuth2ClientProperties;
+    final CustomTokenEnhancer customTokenEnhancer;
+    final CustomAccessTokenConverter customAccessTokenConverter;
     final RedisConnectionFactory redisConnectionFactory;
 
     @Value("${oauth2.key-store.path}")
@@ -71,10 +76,14 @@ public class OAuth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
+        final TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
+        tokenEnhancerChain.setTokenEnhancers(Arrays.asList(customTokenEnhancer, accessTokenConverter()));
+
         endpoints.authenticationManager(authenticationManager)
                 .tokenStore(tokenStore())
                 .accessTokenConverter(accessTokenConverter())
-                .userDetailsService(userDetailsService);
+                .userDetailsService(userDetailsService)
+                .tokenEnhancer(tokenEnhancerChain);
         /* authorizationCode storage that helps to obtain access_token
          * ## In-memory:
          * -> restart a single service => un-known authorization codes gave for Clients before
@@ -115,6 +124,7 @@ public class OAuth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
 
         JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
         converter.setKeyPair(keyStoreKeyFactory.getKeyPair(keyStoreAlias));
+        converter.setAccessTokenConverter(customAccessTokenConverter);
         return converter;
     }
 }

@@ -21,7 +21,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.http.HttpStatus;
@@ -36,7 +35,6 @@ import java.util.Objects;
 @Slf4j
 @EnableCircuitBreaker
 @EnableJpaAuditing
-@EnableDiscoveryClient
 @SpringBootApplication
 public class AccountServiceApplication {
     public static void main(String[] args) {

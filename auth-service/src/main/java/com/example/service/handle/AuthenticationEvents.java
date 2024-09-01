@@ -33,7 +33,7 @@ public class AuthenticationEvents {
     NewTopic lastLoginTopic;
 
     @EventListener
-    public void onSuccess(AuthenticationSuccessEvent successEvent) {
+    public void onAuthenticationSuccess(AuthenticationSuccessEvent successEvent) {
         Object principal = successEvent.getAuthentication().getPrincipal();
         if (principal instanceof TodoUser) {
             LocalDateTime lastLogin = LocalDateTime.now();
