@@ -1,7 +1,10 @@
 package com.todoforge.auth.config;
 
+import com.todoforge.auth.service.custom.CustomJwtTokenStore;
+import com.todoforge.core.service.RedisService;
 import com.todoforge.resource.config.CustomAccessTokenConverter;
 import com.todoforge.auth.service.CustomTokenEnhancer;
+import com.todoforge.resource.service.SecurityService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -45,6 +48,8 @@ public class OAuth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
     final CustomTokenEnhancer customTokenEnhancer;
     final CustomAccessTokenConverter customAccessTokenConverter;
     final RedisConnectionFactory redisConnectionFactory;
+    final RedisService redisService;
+    final SecurityService securityService;
 
     @Value("${oauth2.key-store.path}")
     String keyStorePath;
@@ -113,7 +118,7 @@ public class OAuth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
     @Primary // use auth-service's bean rather than resource-service
     @Bean
     public TokenStore tokenStore() {
-        return new JwtTokenStore(accessTokenConverter());
+        return new CustomJwtTokenStore(accessTokenConverter(), redisService, securityService);
     }
 
     @Primary // use auth-service's bean rather than resource-service
