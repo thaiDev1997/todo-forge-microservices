@@ -269,10 +269,6 @@ services:
     restart: on-failure
     ports:
       - 8084:8084
-    #working_dir: /app
-    #volumes:
-    #  - ./todo-service/target/todo-service.jar:/app/todo-service.jar
-    #command: ["java", "-jar", "todo-service.jar"]
     environment:
       - DB_URL=jdbc:mysql://database:3306/todo
       - DB_USERNAME=root
@@ -300,10 +296,6 @@ services:
     restart: on-failure
     ports:
       - 8085:8085
-    #working_dir: /app
-    #volumes:
-    #  - ./account-service/target/account-service.jar:/app/account-service.jar
-    #command: ["java", "-jar", "account-service.jar"]
     environment:
       - DB_URL=jdbc:mysql://database:3306/account
       - DB_USERNAME=root
